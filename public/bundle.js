@@ -22233,7 +22233,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -22258,13 +22258,17 @@
 	
 	var _Intro2 = _interopRequireDefault(_Intro);
 	
-	var _Products = __webpack_require__(521);
+	var _Products = __webpack_require__(495);
 	
 	var _Products2 = _interopRequireDefault(_Products);
 	
-	var _Donate = __webpack_require__(522);
+	var _Donate = __webpack_require__(496);
 	
 	var _Donate2 = _interopRequireDefault(_Donate);
+	
+	var _Footer = __webpack_require__(497);
+	
+	var _Footer2 = _interopRequireDefault(_Footer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22274,360 +22278,107 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var axios = __webpack_require__(495);
+	var axios = __webpack_require__(498);
 	
 	var Main = function (_Component) {
-	  _inherits(Main, _Component);
+	    _inherits(Main, _Component);
 	
-	  function Main() {
-	    _classCallCheck(this, Main);
+	    function Main() {
+	        _classCallCheck(this, Main);
 	
-	    var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this));
+	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this));
 	
-	    var name = "",
-	        email = "",
-	        phone = "";
-	    if (localStorage.aquaName !== undefined) {
-	      name = localStorage.aquaName;
-	    }
-	    if (localStorage.aquaPhone !== undefined) {
-	      phone = localStorage.aquaPhone;
-	    }
-	    if (localStorage.aquaEmail !== undefined) {
-	      email = localStorage.aquaEmail;
+	        _this.state = {};
+	        //this.test = this.test.bind(this);
+	
+	        return _this;
 	    }
 	
-	    _this.state = {
-	      incidents: [],
-	      reportLocation: [],
-	      page: 'welcome',
-	      name: name,
-	      email: email,
-	      phone: phone,
-	      reportType: "",
-	      firstOpen: true,
-	      sidebar: false,
-	      category: ''
-	    };
-	    _this.test = _this.test.bind(_this);
-	    _this.handleIconClick = _this.handleIconClick.bind(_this);
-	    _this.handleInfoClick = _this.handleInfoClick.bind(_this);
-	    _this.handleSettingsClick = _this.handleSettingsClick.bind(_this);
-	    _this.handleButton = _this.handleButton.bind(_this);
-	    _this.submitReport = _this.submitReport.bind(_this);
-	    _this.closeIcons = _this.closeIcons.bind(_this);
-	    _this.updateUserInfo = _this.updateUserInfo.bind(_this);
-	    _this.closeSettings = _this.closeSettings.bind(_this);
-	    _this.handleMarkers = _this.handleMarkers.bind(_this);
-	    _this.handleReport = _this.handleReport.bind(_this);
-	    _this.handleMapClick = _this.handleMapClick.bind(_this);
-	    _this.returnHome = _this.returnHome.bind(_this);
-	    _this.modalAccept = _this.modalAccept.bind(_this);
-	    _this.clearInfo = _this.clearInfo.bind(_this);
-	    _this.updateMarkers = _this.updateMarkers.bind(_this);
-	    return _this;
-	  }
-	
-	  _createClass(Main, [{
-	    key: 'test',
-	    value: function test() {
-	      console.log("nav clicked");
-	    }
-	  }, {
-	    key: 'clearInfo',
-	    value: function clearInfo() {
-	      this.setState({
-	        name: "",
-	        email: "",
-	        phone: ""
-	      });
-	    }
-	  }, {
-	    key: 'updateMarkers',
-	    value: function updateMarkers(incidents) {
-	      this.setState({
-	        incidents: incidents
-	      });
-	    }
-	  }, {
-	    key: 'modalAccept',
-	    value: function modalAccept() {
-	      var validatedItems = {};
-	      var email = this.refs.modalEmail.state.value;
-	      var name = this.refs.modalName.state.value;
-	      var phone = this.refs.modalPhone.state.value;
-	
-	      if (name !== "" && this.validateName(name)) {
-	        validatedItems['name'] = name;
-	      }
-	      if (phone !== "" && this.validatePhone(phone)) {
-	        phone = phone.replace(/[-\(\)]/gi, '');
-	        validatedItems['phone'] = phone;
-	      }
-	      if (email !== "" && this.validateEmail(email)) {
-	        validatedItems['email'] = email;
-	      }
-	      localStorage.setItem('aquaName', name);
-	      localStorage.setItem('aquaPhone', phone);
-	      localStorage.setItem('aquaEmail', email);
-	
-	      this.setState(validatedItems);
-	      $('#introModal').modal('close');
-	    }
-	  }, {
-	    key: 'modalCancel',
-	    value: function modalCancel() {
-	      $('#introModal').modal('close');
-	    }
-	  }, {
-	    key: 'handleIconClick',
-	    value: function handleIconClick(evt) {
-	      this.setState({
-	        page: 'IconPage'
-	      });
-	    }
-	  }, {
-	    key: 'returnHome',
-	    value: function returnHome() {
-	      this.setState({
-	        page: 'welcome'
-	      });
-	    }
-	  }, {
-	    key: 'handleInfoClick',
-	    value: function handleInfoClick() {
-	      // $('.button-collapse').sideNav('hide')
-	      this.setState({
-	        page: 'InfoPage'
-	      });
-	    }
-	  }, {
-	    key: 'handleSettingsClick',
-	    value: function handleSettingsClick() {
-	      // $('.button-collapse').sideNav('hide')
-	      this.setState({
-	        page: 'SettingsPage'
-	      });
-	    }
-	  }, {
-	    key: 'validateEmail',
-	    value: function validateEmail(email) {
-	      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-	      return re.test(email);
-	    }
-	  }, {
-	    key: 'validateName',
-	    value: function validateName(name) {
-	      var re = /^[a-zA-Z\s]*$/i;
-	      return re.test(name);
-	    }
-	  }, {
-	    key: 'validatePhone',
-	    value: function validatePhone(phone) {
-	      var re = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)?\d{4}$/i;
-	      return re.test(phone);
-	    }
-	  }, {
-	    key: 'updateUserInfo',
-	    value: function updateUserInfo(name, email, phone) {
-	      // $('.button-collapse').sideNav('hide')
-	      var updatedItems = {};
-	      if (name !== "" && name && this.validateName(name)) {
-	        updatedItems['name'] = name;
-	      }
-	      if (email !== "" && email && this.validateEmail(email)) {
-	        updatedItems['email'] = email;
-	      }
-	      if (phone !== "" && phone && this.validatePhone(phone)) {
-	        updatedItems['phone'] = phone;
-	      }
-	      this.setState(updatedItems);
-	    }
-	  }, {
-	    key: 'handleMapClick',
-	    value: function handleMapClick(evt) {
-	      this.setState({
-	        reportLocation: [{
-	          type: '',
-	          lng: parseFloat(evt.latLng.lng()),
-	          lat: parseFloat(evt.latLng.lat()),
-	          showInfo: false
-	        }]
-	      });
-	    }
-	  }, {
-	    key: 'handleReport',
-	    value: function handleReport(reportType, category) {
-	      // $('.button-collapse').sideNav('hide')
-	      this.setState({
-	        page: 'Report',
-	        reportType: reportType,
-	        category: category
-	      });
-	    }
-	  }, {
-	    key: 'submitReport',
-	    value: function submitReport(lat, lng, reportType, category, formattedAddress, moreInfo, level, name, email, phone, date) {
-	      var _this2 = this;
-	
-	      var requestUrl = '/sendFeedback';
-	      axios({
-	        method: 'post',
-	        url: requestUrl,
-	        data: {
-	          lat: lat, lng: lng, reportType: reportType, category: category, formattedAddress: formattedAddress, moreInfo: moreInfo, level: level, name: name, email: email, phone: phone, date: date
+	    _createClass(Main, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'nav',
+	                    { className: 'navbar navbar-custom navbar-fixed-top', role: 'navigation' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'container' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'navbar-header' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { type: 'button', className: 'navbar-toggle', 'data-toggle': 'collapse', 'data-target': '.navbar-main-collapse' },
+	                                'Menu ',
+	                                _react2.default.createElement('i', { className: 'fa fa-bars' })
+	                            ),
+	                            _react2.default.createElement(
+	                                'a',
+	                                { className: 'navbar-brand page-scroll', href: '#page-top' },
+	                                _react2.default.createElement('i', { className: 'fa fa-life-saver' }),
+	                                ' Haro',
+	                                _react2.default.createElement(
+	                                    'b',
+	                                    null,
+	                                    'Athletics'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'collapse navbar-collapse navbar-right navbar-main-collapse' },
+	                            _react2.default.createElement(
+	                                'ul',
+	                                { className: 'nav navbar-nav' },
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    { className: 'hidden' },
+	                                    _react2.default.createElement('a', { href: '#page-top' })
+	                                ),
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'a',
+	                                        { className: 'page-scroll', href: '#about' },
+	                                        'About'
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'a',
+	                                        { className: 'page-scroll', href: '#products' },
+	                                        'Products'
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'a',
+	                                        { className: 'page-scroll', href: '#donate' },
+	                                        'Donate'
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(_Intro2.default, null),
+	                _react2.default.createElement(_About2.default, null),
+	                _react2.default.createElement(_Products2.default, null),
+	                _react2.default.createElement(_Donate2.default, null),
+	                _react2.default.createElement(_Footer2.default, null)
+	            );
 	        }
-	      }).then(function (res) {
-	        console.log('successful');
-	      }).catch(function (error) {
-	        console.log('not successful');
-	        console.log(error);
-	      });
+	    }]);
 	
-	      var url = '/getIncidents';
-	      _superagent2.default.get(url).query(null).set('Accept', 'text/json').end(function (err, response) {
-	        _this2.setState({
-	          page: 'welcome',
-	          reportLocation: [],
-	          incidents: response.body
-	        });
-	      });
-	    }
-	  }, {
-	    key: 'closeIcons',
-	    value: function closeIcons() {
-	      this.setState({
-	        page: 'welcome'
-	      });
-	    }
-	  }, {
-	    key: 'closeSettings',
-	    value: function closeSettings(name, email) {
-	      this.setState({
-	        page: 'welcome',
-	        name: name,
-	        email: email
-	      });
-	    }
-	  }, {
-	    key: 'handleButton',
-	    value: function handleButton() {
-	      this.setState({
-	        page: 'ReportForm',
-	        firstOpen: false
-	      });
-	    }
-	  }, {
-	    key: 'handleMarkers',
-	    value: function handleMarkers(incidents) {
-	      this.setState({
-	        incidents: incidents
-	      });
-	    }
-	  }, {
-	    key: 'testFunction',
-	    value: function testFunction() {
-	      console.log("test");
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this3 = this;
-	
-	      var url = '/getIncidents';
-	      _superagent2.default.get(url).query(null).set('Accept', 'text/json').end(function (err, response) {
-	        var incidents = response.body;
-	        _this3.setState({
-	          incidents: incidents
-	        });
-	      });
-	      $('#introModal').modal('open');
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'nav',
-	          { className: 'navbar navbar-custom navbar-fixed-top', role: 'navigation' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'container' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'navbar-header' },
-	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', className: 'navbar-toggle', 'data-toggle': 'collapse', 'data-target': '.navbar-main-collapse' },
-	                'Menu ',
-	                _react2.default.createElement('i', { className: 'fa fa-bars' })
-	              ),
-	              _react2.default.createElement(
-	                'a',
-	                { className: 'navbar-brand page-scroll', href: '#page-top' },
-	                _react2.default.createElement('i', { className: 'fa fa-life-saver' }),
-	                ' ',
-	                _react2.default.createElement(
-	                  'span',
-	                  { className: 'light' },
-	                  'Haro'
-	                ),
-	                'Athletics'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'collapse navbar-collapse navbar-right navbar-main-collapse' },
-	              _react2.default.createElement(
-	                'ul',
-	                { className: 'nav navbar-nav' },
-	                _react2.default.createElement(
-	                  'li',
-	                  { className: 'hidden' },
-	                  _react2.default.createElement('a', { href: '#page-top' })
-	                ),
-	                _react2.default.createElement(
-	                  'li',
-	                  null,
-	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'page-scroll', href: '#about' },
-	                    'About'
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'li',
-	                  null,
-	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'page-scroll', href: '#products' },
-	                    'Products'
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'li',
-	                  null,
-	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'page-scroll', href: '#donate' },
-	                    'Donate'
-	                  )
-	                )
-	              )
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(_Intro2.default, null),
-	        _react2.default.createElement(_About2.default, null),
-	        _react2.default.createElement(_Products2.default, null),
-	        _react2.default.createElement(_Donate2.default, null)
-	      );
-	    }
-	  }]);
-	
-	  return Main;
+	    return Main;
 	}(_react.Component);
 	
 	exports.default = Main;
@@ -48233,102 +47984,91 @@
 	        'section',
 	        { id: 'about', className: 'container content-section text-center' },
 	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'About'
-	        ),
-	        _react2.default.createElement(
 	          'div',
-	          { className: 'about-section' },
+	          { className: 'section-content' },
 	          _react2.default.createElement(
-	            'h6',
-	            { className: 'about-info' },
-	            'Haro Athletics is a family owned company that believes in building community through designs and donations.  They began in 2015, and have since then helped many families and organizations.  Their goal is to continue to build strong relationships with their customers and help them achieve their goals. '
+	            'h2',
+	            { className: 'section-title' },
+	            'About'
 	          ),
 	          _react2.default.createElement(
-	            'h4',
-	            { className: 'about-headings' },
-	            'Mission'
-	          ),
-	          _react2.default.createElement(
-	            'h6',
-	            null,
-	            'Our mission is provide families and organizations with the ability to raise funds for their cause, and also donate to local charities. '
-	          )
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.Carousel,
-	          null,
-	          _react2.default.createElement(
-	            _reactBootstrap.Carousel.Item,
-	            null,
-	            _react2.default.createElement('img', { width: 900, height: 500, alt: '900x500', src: 'FamilyPic2017.jpg' }),
+	            'div',
+	            { className: 'about-section' },
 	            _react2.default.createElement(
-	              _reactBootstrap.Carousel.Caption,
+	              'h6',
+	              { className: 'section-body' },
+	              'Haro Athletics is a family owned company that believes in building community through designs and donations.  They began in 2015, and have since then helped many families and organizations.  Their goal is to continue to build strong relationships with their customers and help them achieve their goals. '
+	            ),
+	            _react2.default.createElement(
+	              'h4',
+	              { className: 'section-headings' },
+	              'Mission'
+	            ),
+	            _react2.default.createElement(
+	              'h6',
+	              { className: 'section-body' },
+	              'Our mission is provide families and organizations with the ability to raise funds for their cause, and also donate to local charities. '
+	            )
+	          ),
+	          _react2.default.createElement(
+	            _reactBootstrap.Carousel,
+	            { id: 'about-carousel' },
+	            _react2.default.createElement(
+	              _reactBootstrap.Carousel.Item,
 	              null,
+	              _react2.default.createElement('img', { width: 500, height: 500, alt: '900x500', src: 'FamilyPic2017.jpg' }),
 	              _react2.default.createElement(
-	                'h3',
+	                _reactBootstrap.Carousel.Caption,
 	                null,
-	                'First slide label'
-	              ),
+	                _react2.default.createElement(
+	                  'p',
+	                  null,
+	                  'Ruben'
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _reactBootstrap.Carousel.Item,
+	              null,
+	              _react2.default.createElement('img', { width: 900, height: 500, alt: '900x500', src: 'FamilyPic2017.jpg' }),
 	              _react2.default.createElement(
-	                'p',
+	                _reactBootstrap.Carousel.Caption,
 	                null,
-	                'Nulla vitae elit libero, a pharetra augue mollis interdum.'
+	                _react2.default.createElement(
+	                  'p',
+	                  null,
+	                  'Ruben'
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _reactBootstrap.Carousel.Item,
+	              null,
+	              _react2.default.createElement('img', { width: 900, height: 500, alt: '900x500', src: 'FamilyPic2017.jpg' }),
+	              _react2.default.createElement(
+	                _reactBootstrap.Carousel.Caption,
+	                null,
+	                _react2.default.createElement(
+	                  'p',
+	                  null,
+	                  'Ruben'
+	                )
 	              )
 	            )
 	          ),
 	          _react2.default.createElement(
-	            _reactBootstrap.Carousel.Item,
-	            null,
-	            _react2.default.createElement('img', { width: 900, height: 500, alt: '900x500', src: 'FamilyPic2017.jpg' }),
+	            'div',
+	            { className: 'about-section' },
 	            _react2.default.createElement(
-	              _reactBootstrap.Carousel.Caption,
-	              null,
-	              _react2.default.createElement(
-	                'h3',
-	                null,
-	                'Second slide label'
-	              ),
-	              _react2.default.createElement(
-	                'p',
-	                null,
-	                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _reactBootstrap.Carousel.Item,
-	            null,
-	            _react2.default.createElement('img', { width: 900, height: 500, alt: '900x500', src: 'FamilyPic2017.jpg' }),
+	              'h4',
+	              { className: 'section-headings' },
+	              'Vision'
+	            ),
 	            _react2.default.createElement(
-	              _reactBootstrap.Carousel.Caption,
-	              null,
-	              _react2.default.createElement(
-	                'h3',
-	                null,
-	                'Third slide label'
-	              ),
-	              _react2.default.createElement(
-	                'p',
-	                null,
-	                'Praesent commodo cursus magna, vel scelerisque nisl consectetur.'
-	              )
+	              'h6',
+	              { className: 'section-body' },
+	              'Haro Athletics believes in supporting different causes that build community. '
 	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'about-section' },
-	          _react2.default.createElement(
-	            'h4',
-	            { className: 'about-headings' },
-	            'Vision'
-	          ),
-	          _react2.default.createElement(
-	            'h6',
-	            null,
-	            'Haro Athletics believes in supporting different causes that build community. '
 	          )
 	        )
 	      );
@@ -48391,7 +48131,16 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'intro' },
-	        _react2.default.createElement('div', { className: 'intro-body' })
+	        _react2.default.createElement('div', { className: 'intro-body' }),
+	        _react2.default.createElement(
+	          'a',
+	          { href: '#about', id: 'intro-button' },
+	          _react2.default.createElement(
+	            'div',
+	            { id: 'intro-button-container' },
+	            _react2.default.createElement('i', { className: 'fa fa-angle-double-down animated' })
+	          )
+	        )
 	      );
 	    }
 	  }]);
@@ -48405,7 +48154,148 @@
 /* 495 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(496);
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	var _Checkout = __webpack_require__(524);
+	
+	var _Checkout2 = _interopRequireDefault(_Checkout);
+	
+	var _allProducts = __webpack_require__(526);
+	
+	var _allProducts2 = _interopRequireDefault(_allProducts);
+	
+	var _Items = __webpack_require__(527);
+	
+	var _Items2 = _interopRequireDefault(_Items);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Products = function (_Component) {
+	  _inherits(Products, _Component);
+	
+	  function Products() {
+	    _classCallCheck(this, Products);
+	
+	    var _this = _possibleConstructorReturn(this, (Products.__proto__ || Object.getPrototypeOf(Products)).call(this));
+	
+	    _this.state = {
+	      checkoutTotal: 0,
+	      checkoutItems: [],
+	      view: "allProducts"
+	    };
+	    _this.addToCart = _this.addToCart.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(Products, [{
+	    key: 'addToCart',
+	    value: function addToCart(url, index, category) {
+	      if (category === "individualItems") {
+	        this.setState({
+	          checkoutItems: [].concat(_toConsumableArray(this.state.checkoutItems), [_allProducts2.default[category][index]])
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var individualItemsView = function individualItemsView() {
+	        return _allProducts2.default.individualItems.map(function (item, index) {
+	          return _react2.default.createElement(_Items2.default, _extends({ key: item.url }, item, { index: index, category: "individualItems", addToCart: _this2.addToCart }));
+	        });
+	      };
+	      if (this.state.view === 'allProducts') {
+	        return _react2.default.createElement(
+	          'section',
+	          { id: 'products', className: 'container-fluid content-section text-center inverse-color' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'section-content' },
+	            _react2.default.createElement(
+	              'h2',
+	              { className: 'section-title inverse-color' },
+	              'Products'
+	            ),
+	            _react2.default.createElement(
+	              'h4',
+	              { className: 'section-headings inverse-color' },
+	              'Current Campaigns'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'container columns' },
+	              _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/FSHA/FSHA_Logo.jpg' }),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'btn btn-primary' },
+	                'Go To Campaign'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'container columns' },
+	              _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/IH/IHHS_Logo.jpg' }),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'btn btn-primary' },
+	                'Go To Campaign'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'h4',
+	              { className: 'product-headings inverse-color' },
+	              'Individual Items'
+	            ),
+	            individualItemsView(),
+	            _react2.default.createElement(_Checkout2.default, {
+	              name: 'The Road to learn React',
+	              description: "Only the Book",
+	              amount: this.state.total
+	            })
+	          )
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          'Alllll of my love'
+	        );
+	      }
+	    }
+	  }]);
+	
+	  return Products;
+	}(_react.Component);
+	
+	exports.default = Products;
 
 /***/ }),
 /* 496 */
@@ -48413,10 +48303,203 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
-	var bind = __webpack_require__(498);
-	var Axios = __webpack_require__(500);
-	var defaults = __webpack_require__(501);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Donate = function (_Component) {
+	  _inherits(Donate, _Component);
+	
+	  function Donate() {
+	    _classCallCheck(this, Donate);
+	
+	    var _this = _possibleConstructorReturn(this, (Donate.__proto__ || Object.getPrototypeOf(Donate)).call(this));
+	
+	    _this.state = {
+	      incidents: []
+	
+	      // this.onMarkerClick = this.onMarkerClick.bind(this);
+	    };return _this;
+	  }
+	
+	  _createClass(Donate, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'section',
+	        { id: 'donate', className: 'container content-section text-center' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'section-content' },
+	          _react2.default.createElement(
+	            'h2',
+	            { className: 'section-title' },
+	            'Donate'
+	          ),
+	          _react2.default.createElement(
+	            'h4',
+	            { className: 'section-heading' },
+	            'Charity of the Month'
+	          ),
+	          _react2.default.createElement('img', { className: 'donation-shirt', src: 'https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/17022205_10154220739377611_6746995110482650659_n.jpg?oh=745ea1aadddc76fddd634062729f99c9&oe=59EA0E32' }),
+	          _react2.default.createElement(
+	            'h4',
+	            { className: 'section-headings' },
+	            '#TeamJessica'
+	          ),
+	          _react2.default.createElement(
+	            'h6',
+	            { className: 'section-body' },
+	            'A wonderful organization has given us the opportunity to raise money for a cure for A-T by volunteering! Saturday, May 6 in Pomona and Saturday, June 10 San Bernardino #TeamJessica is being asked to provide 20 volunteers to serve at a family fun run type event. Plan to stay all day. Each person who serves will earn $50 towards the ATCP. Kids ages 12 -15 are welcome with a parent. Ages 16 and up do not need a parent. The organization needs a firm commitment from everyone who volunteers, so please make sure this works into your schedule.'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'donation-button' },
+	            _react2.default.createElement(
+	              'form',
+	              { action: 'https://www.paypal.com/cgi-bin/webscr', method: 'post', target: '_top' },
+	              _react2.default.createElement('input', { type: 'hidden', name: 'cmd', value: '_s-xclick' }),
+	              _react2.default.createElement('input', { type: 'hidden', name: 'hosted_button_id', value: '4A7EN4G4L4SUL' }),
+	              _react2.default.createElement('input', { type: 'image', src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif', name: 'submit', alt: 'PayPal - The safer, easier way to pay online!' }),
+	              _react2.default.createElement('img', { alt: '', src: 'https://www.paypalobjects.com/en_US/i/scr/pixel.gif', width: '1', height: '1' })
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Donate;
+	}(_react.Component);
+	
+	exports.default = Donate;
+
+/***/ }),
+/* 497 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Footer = function (_Component) {
+	  _inherits(Footer, _Component);
+	
+	  function Footer() {
+	    _classCallCheck(this, Footer);
+	
+	    var _this = _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).call(this));
+	
+	    _this.state = {
+	      incidents: []
+	
+	      // this.onMarkerClick = this.onMarkerClick.bind(this);
+	    };return _this;
+	  }
+	
+	  _createClass(Footer, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'footer',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container text-center contact-footer' },
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Copyright \xA9 HaroAthletics 2017'
+	          ),
+	          _react2.default.createElement(
+	            'h7',
+	            null,
+	            'Contact'
+	          ),
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              'a',
+	              { href: 'mailto:feedback@startbootstrap.com' },
+	              'rubenharo@gmail.com'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '765-543-6543'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Footer;
+	}(_react.Component);
+	
+	exports.default = Footer;
+
+/***/ }),
+/* 498 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(499);
+
+/***/ }),
+/* 499 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(500);
+	var bind = __webpack_require__(501);
+	var Axios = __webpack_require__(503);
+	var defaults = __webpack_require__(504);
 	
 	/**
 	 * Create an instance of Axios
@@ -48449,15 +48532,15 @@
 	};
 	
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(518);
-	axios.CancelToken = __webpack_require__(519);
-	axios.isCancel = __webpack_require__(515);
+	axios.Cancel = __webpack_require__(521);
+	axios.CancelToken = __webpack_require__(522);
+	axios.isCancel = __webpack_require__(518);
 	
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(520);
+	axios.spread = __webpack_require__(523);
 	
 	module.exports = axios;
 	
@@ -48466,13 +48549,13 @@
 
 
 /***/ }),
-/* 497 */
+/* 500 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var bind = __webpack_require__(498);
-	var isBuffer = __webpack_require__(499);
+	var bind = __webpack_require__(501);
+	var isBuffer = __webpack_require__(502);
 	
 	/*global toString:true*/
 	
@@ -48775,7 +48858,7 @@
 
 
 /***/ }),
-/* 498 */
+/* 501 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48792,7 +48875,7 @@
 
 
 /***/ }),
-/* 499 */
+/* 502 */
 /***/ (function(module, exports) {
 
 	/*!
@@ -48819,17 +48902,17 @@
 
 
 /***/ }),
-/* 500 */
+/* 503 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var defaults = __webpack_require__(501);
-	var utils = __webpack_require__(497);
-	var InterceptorManager = __webpack_require__(512);
-	var dispatchRequest = __webpack_require__(513);
-	var isAbsoluteURL = __webpack_require__(516);
-	var combineURLs = __webpack_require__(517);
+	var defaults = __webpack_require__(504);
+	var utils = __webpack_require__(500);
+	var InterceptorManager = __webpack_require__(515);
+	var dispatchRequest = __webpack_require__(516);
+	var isAbsoluteURL = __webpack_require__(519);
+	var combineURLs = __webpack_require__(520);
 	
 	/**
 	 * Create a new instance of Axios
@@ -48911,13 +48994,13 @@
 
 
 /***/ }),
-/* 501 */
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(497);
-	var normalizeHeaderName = __webpack_require__(502);
+	var utils = __webpack_require__(500);
+	var normalizeHeaderName = __webpack_require__(505);
 	
 	var DEFAULT_CONTENT_TYPE = {
 	  'Content-Type': 'application/x-www-form-urlencoded'
@@ -48933,10 +49016,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(503);
+	    adapter = __webpack_require__(506);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(503);
+	    adapter = __webpack_require__(506);
 	  }
 	  return adapter;
 	}
@@ -49010,12 +49093,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 502 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
+	var utils = __webpack_require__(500);
 	
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -49028,18 +49111,18 @@
 
 
 /***/ }),
-/* 503 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(497);
-	var settle = __webpack_require__(504);
-	var buildURL = __webpack_require__(507);
-	var parseHeaders = __webpack_require__(508);
-	var isURLSameOrigin = __webpack_require__(509);
-	var createError = __webpack_require__(505);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(510);
+	var utils = __webpack_require__(500);
+	var settle = __webpack_require__(507);
+	var buildURL = __webpack_require__(510);
+	var parseHeaders = __webpack_require__(511);
+	var isURLSameOrigin = __webpack_require__(512);
+	var createError = __webpack_require__(508);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(513);
 	
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -49136,7 +49219,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(511);
+	      var cookies = __webpack_require__(514);
 	
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -49215,12 +49298,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 504 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var createError = __webpack_require__(505);
+	var createError = __webpack_require__(508);
 	
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -49247,12 +49330,12 @@
 
 
 /***/ }),
-/* 505 */
+/* 508 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var enhanceError = __webpack_require__(506);
+	var enhanceError = __webpack_require__(509);
 	
 	/**
 	 * Create an Error with the specified message, config, error code, request and response.
@@ -49271,7 +49354,7 @@
 
 
 /***/ }),
-/* 506 */
+/* 509 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49298,12 +49381,12 @@
 
 
 /***/ }),
-/* 507 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
+	var utils = __webpack_require__(500);
 	
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -49372,12 +49455,12 @@
 
 
 /***/ }),
-/* 508 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
+	var utils = __webpack_require__(500);
 	
 	/**
 	 * Parse headers into an object
@@ -49415,12 +49498,12 @@
 
 
 /***/ }),
-/* 509 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
+	var utils = __webpack_require__(500);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -49489,7 +49572,7 @@
 
 
 /***/ }),
-/* 510 */
+/* 513 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49531,12 +49614,12 @@
 
 
 /***/ }),
-/* 511 */
+/* 514 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
+	var utils = __webpack_require__(500);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -49590,12 +49673,12 @@
 
 
 /***/ }),
-/* 512 */
+/* 515 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
+	var utils = __webpack_require__(500);
 	
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -49648,15 +49731,15 @@
 
 
 /***/ }),
-/* 513 */
+/* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
-	var transformData = __webpack_require__(514);
-	var isCancel = __webpack_require__(515);
-	var defaults = __webpack_require__(501);
+	var utils = __webpack_require__(500);
+	var transformData = __webpack_require__(517);
+	var isCancel = __webpack_require__(518);
+	var defaults = __webpack_require__(504);
 	
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -49733,12 +49816,12 @@
 
 
 /***/ }),
-/* 514 */
+/* 517 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(497);
+	var utils = __webpack_require__(500);
 	
 	/**
 	 * Transform the data for a request or a response
@@ -49759,7 +49842,7 @@
 
 
 /***/ }),
-/* 515 */
+/* 518 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49770,7 +49853,7 @@
 
 
 /***/ }),
-/* 516 */
+/* 519 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49790,7 +49873,7 @@
 
 
 /***/ }),
-/* 517 */
+/* 520 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49810,7 +49893,7 @@
 
 
 /***/ }),
-/* 518 */
+/* 521 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49835,12 +49918,12 @@
 
 
 /***/ }),
-/* 519 */
+/* 522 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Cancel = __webpack_require__(518);
+	var Cancel = __webpack_require__(521);
 	
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -49898,7 +49981,7 @@
 
 
 /***/ }),
-/* 520 */
+/* 523 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49931,14 +50014,91 @@
 
 
 /***/ }),
-/* 521 */
+/* 524 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _axios = __webpack_require__(498);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _reactStripeCheckout = __webpack_require__(525);
+	
+	var _reactStripeCheckout2 = _interopRequireDefault(_reactStripeCheckout);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import STRIPE_PUBLISHABLE from './constants/stripe';
+	// import PAYMENT_SERVER_URL from './constants/server';
+	
+	var CURRENCY = 'USD';
+	
+	var fromEuroToCent = function fromEuroToCent(amount) {
+	  return amount * 100;
+	};
+	
+	var successPayment = function successPayment(data) {};
+	
+	var errorPayment = function errorPayment(data) {
+	  console.log(data);
+	  alert('Payment Error');
+	};
+	
+	var onToken = function onToken(amount, description) {
+	  return function (token) {
+	    return _axios2.default.post('/checkout', {
+	      description: description,
+	      source: token.id,
+	      currency: CURRENCY,
+	      amount: fromEuroToCent(amount)
+	    }).then(successPayment).catch(errorPayment);
+	  };
+	};
+	
+	var Checkout = function Checkout(_ref) {
+	  var name = _ref.name,
+	      description = _ref.description,
+	      amount = _ref.amount;
+	  return _react2.default.createElement(
+	    _reactStripeCheckout2.default,
+	    {
+	      name: name,
+	      description: description,
+	      amount: fromEuroToCent(amount),
+	      token: onToken(amount, description),
+	      currency: CURRENCY,
+	      stripeKey: 'pk_test_isqamEERLx0pQJVekIgO9Njy'
+	    },
+	    _react2.default.createElement(
+	      'button',
+	      { className: 'btn btn-default' },
+	      'Checkout'
+	    )
+	  );
+	};
+	
+	exports.default = Checkout;
+
+/***/ }),
+/* 525 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -49946,13 +50106,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(237);
+	var _propTypes = __webpack_require__(188);
 	
-	var _superagent = __webpack_require__(229);
-	
-	var _superagent2 = _interopRequireDefault(_superagent);
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -49960,128 +50120,651 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Products = function (_Component) {
-	    _inherits(Products, _Component);
+	var scriptLoading = false;
+	var scriptLoaded = false;
+	var scriptDidError = false;
 	
-	    function Products() {
-	        _classCallCheck(this, Products);
+	var ReactStripeCheckout = function (_React$Component) {
+	  _inherits(ReactStripeCheckout, _React$Component);
 	
-	        var _this = _possibleConstructorReturn(this, (Products.__proto__ || Object.getPrototypeOf(Products)).call(this));
+	  function ReactStripeCheckout(props) {
+	    _classCallCheck(this, ReactStripeCheckout);
 	
-	        _this.state = {
-	            incidents: []
+	    var _this = _possibleConstructorReturn(this, (ReactStripeCheckout.__proto__ || Object.getPrototypeOf(ReactStripeCheckout)).call(this, props));
 	
-	            // this.onMarkerClick = this.onMarkerClick.bind(this);
-	        };return _this;
-	    }
-	
-	    _createClass(Products, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'section',
-	                { id: 'products', className: 'container-fluid content-section text-center' },
-	                _react2.default.createElement(
-	                    'h2',
-	                    null,
-	                    'Products'
-	                ),
-	                _react2.default.createElement(
-	                    'h4',
-	                    { className: 'product-headings' },
-	                    'T-Shirts'
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'container columns' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'one-third' },
-	                        _react2.default.createElement('img', { className: 'product-shirt', src: 'http://www.kustom-tees-4-u.com/products/1/5046091.png' }),
-	                        _react2.default.createElement(
-	                            'form',
-	                            { target: 'paypal', action: 'https://www.paypal.com/cgi-bin/webscr', method: 'post' },
-	                            _react2.default.createElement('input', { type: 'hidden', name: 'cmd', value: '_s-xclick' }),
-	                            _react2.default.createElement('input', { type: 'hidden', name: 'hosted_button_id', value: 'X75JBVHUVM7SA' }),
-	                            _react2.default.createElement('input', { type: 'hidden', name: 'on0', value: 'Size' }),
-	                            _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                'Size'
-	                            ),
-	                            _react2.default.createElement(
-	                                'select',
-	                                { className: 'select-option', name: 'os0' },
-	                                _react2.default.createElement(
-	                                    'option',
-	                                    { value: 'Small' },
-	                                    'Small '
-	                                ),
-	                                _react2.default.createElement(
-	                                    'option',
-	                                    { value: 'Medium' },
-	                                    'Medium '
-	                                ),
-	                                _react2.default.createElement(
-	                                    'option',
-	                                    { value: 'Large' },
-	                                    'Large '
-	                                )
-	                            ),
-	                            _react2.default.createElement('input', { className: 'add-to-cart', type: 'image', src: 'https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif', name: 'submit', alt: 'PayPal - The safer, easier way to pay online!' }),
-	                            _react2.default.createElement('img', { alt: '', src: 'https://www.paypalobjects.com/en_US/i/scr/pixel.gif', width: '1', height: '1' })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'one-third' },
-	                        _react2.default.createElement('img', { className: 'product-shirt', src: 'http://www.kustom-tees-4-u.com/products/1/5046091.png' }),
-	                        _react2.default.createElement(
-	                            'form',
-	                            { target: 'paypal', action: 'https://www.paypal.com/cgi-bin/webscr', method: 'post' },
-	                            _react2.default.createElement('input', { type: 'hidden', name: 'cmd', value: '_s-xclick' }),
-	                            _react2.default.createElement('input', { type: 'hidden', name: 'hosted_button_id', value: 'X75JBVHUVM7SA' }),
-	                            _react2.default.createElement('input', { type: 'hidden', name: 'on0', value: 'Size' }),
-	                            _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                'Size'
-	                            ),
-	                            _react2.default.createElement(
-	                                'select',
-	                                { className: 'select-option', name: 'os0' },
-	                                _react2.default.createElement(
-	                                    'option',
-	                                    { value: 'Small' },
-	                                    'Small '
-	                                ),
-	                                _react2.default.createElement(
-	                                    'option',
-	                                    { value: 'Medium' },
-	                                    'Medium '
-	                                ),
-	                                _react2.default.createElement(
-	                                    'option',
-	                                    { value: 'Large' },
-	                                    'Large '
-	                                )
-	                            ),
-	                            _react2.default.createElement('input', { className: 'add-to-cart', type: 'image', src: 'https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif', name: 'submit', alt: 'PayPal - The safer, easier way to pay online!' }),
-	                            _react2.default.createElement('img', { alt: '', src: 'https://www.paypalobjects.com/en_US/i/scr/pixel.gif', width: '1', height: '1' })
-	                        )
-	                    )
-	                )
-	            );
+	    _this.onScriptLoaded = function () {
+	      if (!ReactStripeCheckout.stripeHandler) {
+	        ReactStripeCheckout.stripeHandler = StripeCheckout.configure({
+	          key: _this.props.stripeKey
+	        });
+	        if (_this.hasPendingClick) {
+	          _this.showStripeDialog();
 	        }
-	    }]);
+	      }
+	    };
 	
-	    return Products;
-	}(_react.Component);
+	    _this.onScriptError = function () {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
 	
-	exports.default = Products;
+	      _this.hideLoadingDialog();
+	      if (_this.props.onScriptError) {
+	        _this.props.onScriptError.apply(_this, args);
+	      }
+	    };
+	
+	    _this.onClosed = function () {
+	      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	        args[_key2] = arguments[_key2];
+	      }
+	
+	      _this.setState({ open: false });
+	      if (_this.props.closed) {
+	        _this.props.closed.apply(_this, args);
+	      }
+	    };
+	
+	    _this.onOpened = function () {
+	      for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	        args[_key3] = arguments[_key3];
+	      }
+	
+	      _this.setState({ open: true });
+	      if (_this.props.opened) {
+	        _this.props.opened.apply(_this, args);
+	      }
+	    };
+	
+	    _this.getConfig = function () {
+	      return ['token', 'image', 'name', 'description', 'amount', 'locale', 'currency', 'panelLabel', 'zipCode', 'shippingAddress', 'billingAddress', 'email', 'allowRememberMe', 'bitcoin', 'alipay', 'alipayReusable'].reduce(function (config, key) {
+	        return _extends({}, config, _this.props.hasOwnProperty(key) && _defineProperty({}, key, _this.props[key]));
+	      }, {
+	        opened: _this.onOpened,
+	        closed: _this.onClosed
+	      });
+	    };
+	
+	    _this.onClick = function () {
+	      // eslint-disable-line react/sort-comp
+	      if (_this.props.disabled) {
+	        return;
+	      }
+	
+	      if (scriptDidError) {
+	        try {
+	          throw new Error('Tried to call onClick, but StripeCheckout failed to load');
+	        } catch (x) {} // eslint-disable-line no-empty
+	      } else if (ReactStripeCheckout.stripeHandler) {
+	        _this.showStripeDialog();
+	      } else {
+	        _this.showLoadingDialog();
+	        _this.hasPendingClick = true;
+	      }
+	    };
+	
+	    _this.handleOnMouseDown = function () {
+	      _this.setState({
+	        buttonActive: true
+	      });
+	    };
+	
+	    _this.handleOnMouseUp = function () {
+	      _this.setState({
+	        buttonActive: false
+	      });
+	    };
+	
+	    _this.state = {
+	      open: false,
+	      buttonActive: false
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(ReactStripeCheckout, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+	
+	      if (scriptLoaded) {
+	        return;
+	      }
+	
+	      if (scriptLoading) {
+	        return;
+	      }
+	
+	      scriptLoading = true;
+	
+	      var script = document.createElement('script');
+	      if (typeof this.props.onScriptTagCreated === 'function') {
+	        this.props.onScriptTagCreated(script);
+	      }
+	
+	      script.src = 'https://checkout.stripe.com/checkout.js';
+	      script.async = 1;
+	
+	      this.loadPromise = function () {
+	        var canceled = false;
+	        var promise = new Promise(function (resolve, reject) {
+	          script.onload = function () {
+	            scriptLoaded = true;
+	            scriptLoading = false;
+	            resolve();
+	            _this2.onScriptLoaded();
+	          };
+	          script.onerror = function (event) {
+	            scriptDidError = true;
+	            scriptLoading = false;
+	            reject(event);
+	            _this2.onScriptError(event);
+	          };
+	        });
+	        var wrappedPromise = new Promise(function (accept, cancel) {
+	          promise.then(function () {
+	            return canceled ? cancel({ isCanceled: true }) : accept();
+	          }); // eslint-disable-line no-confusing-arrow
+	          promise.catch(function (error) {
+	            return canceled ? cancel({ isCanceled: true }) : cancel(error);
+	          }); // eslint-disable-line no-confusing-arrow
+	        });
+	
+	        return {
+	          promise: wrappedPromise,
+	          cancel: function cancel() {
+	            canceled = true;
+	          }
+	        };
+	      }();
+	
+	      this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
+	
+	      document.body.appendChild(script);
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      if (!scriptLoading) {
+	        this.updateStripeHandler();
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.loadPromise) {
+	        this.loadPromise.cancel();
+	      }
+	      if (ReactStripeCheckout.stripeHandler && this.state.open) {
+	        ReactStripeCheckout.stripeHandler.close();
+	      }
+	    }
+	  }, {
+	    key: 'updateStripeHandler',
+	    value: function updateStripeHandler() {
+	      if (!ReactStripeCheckout.stripeHandler || this.props.reconfigureOnUpdate) {
+	        ReactStripeCheckout.stripeHandler = StripeCheckout.configure({
+	          key: this.props.stripeKey
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'showLoadingDialog',
+	    value: function showLoadingDialog() {
+	      if (this.props.showLoadingDialog) {
+	        for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+	          args[_key4] = arguments[_key4];
+	        }
+	
+	        this.props.showLoadingDialog.apply(this, args);
+	      }
+	    }
+	  }, {
+	    key: 'hideLoadingDialog',
+	    value: function hideLoadingDialog() {
+	      if (this.props.hideLoadingDialog) {
+	        for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+	          args[_key5] = arguments[_key5];
+	        }
+	
+	        this.props.hideLoadingDialog.apply(this, args);
+	      }
+	    }
+	  }, {
+	    key: 'showStripeDialog',
+	    value: function showStripeDialog() {
+	      this.hideLoadingDialog();
+	      ReactStripeCheckout.stripeHandler.open(this.getConfig());
+	    }
+	  }, {
+	    key: 'renderDefaultStripeButton',
+	    value: function renderDefaultStripeButton() {
+	      return _react2.default.createElement(
+	        'button',
+	        _extends({}, _defineProperty({}, this.props.triggerEvent, this.onClick), {
+	          className: this.props.className,
+	          onMouseDown: this.handleOnMouseDown,
+	          onFocus: this.handleOnMouseDown,
+	          onMouseUp: this.handleOnMouseUp,
+	          onMouseOut: this.handleOnMouseUp,
+	          onBlur: this.handleOnMouseUp,
+	          style: _extends({}, {
+	            overflow: 'hidden',
+	            display: 'inline-block',
+	            background: 'linear-gradient(#28a0e5,#015e94)',
+	            border: 0,
+	            padding: 1,
+	            textDecoration: 'none',
+	            borderRadius: 5,
+	            boxShadow: '0 1px 0 rgba(0,0,0,0.2)',
+	            cursor: 'pointer',
+	            visibility: 'visible',
+	            userSelect: 'none'
+	          }, this.state.buttonActive && {
+	            background: '#005d93'
+	          }, this.props.style)
+	        }),
+	        _react2.default.createElement(
+	          'span',
+	          {
+	            style: _extends({}, {
+	              backgroundImage: 'linear-gradient(#7dc5ee,#008cdd 85%,#30a2e4)',
+	              fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+	              fontSize: 14,
+	              position: 'relative',
+	              padding: '0 12px',
+	              display: 'block',
+	              height: 30,
+	              lineHeight: '30px',
+	              color: '#fff',
+	              fontWeight: 'bold',
+	              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
+	              textShadow: '0 -1px 0 rgba(0,0,0,0.25)',
+	              borderRadius: 4
+	            }, this.state.buttonActive && {
+	              color: '#eee',
+	              boxShadow: 'inset 0 1px 0 rgba(0,0,0,0.1)',
+	              backgroundImage: 'linear-gradient(#008cdd,#008cdd 85%,#239adf)'
+	            }, this.props.textStyle)
+	          },
+	          this.props.label
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'renderDisabledButton',
+	    value: function renderDisabledButton() {
+	      return _react2.default.createElement(
+	        'button',
+	        {
+	          disabled: true,
+	          style: {
+	            background: 'rgba(0,0,0,0.2)',
+	            overflow: 'hidden',
+	            display: 'inline-block',
+	            border: 0,
+	            padding: 1,
+	            textDecoration: 'none',
+	            borderRadius: 5,
+	            userSelect: 'none'
+	          }
+	        },
+	        _react2.default.createElement(
+	          'span',
+	          {
+	            style: {
+	              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
+	              fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+	              fontSize: 14,
+	              position: 'relative',
+	              padding: '0 12px',
+	              display: 'block',
+	              height: 30,
+	              lineHeight: '30px',
+	              borderRadius: 4,
+	              color: '#999',
+	              background: '#f8f9fa',
+	              textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+	            }
+	          },
+	          this.props.label
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      if (this.props.desktopShowModal === true && !this.state.open) {
+	        this.onClick();
+	      } else if (this.props.desktopShowModal === false && this.state.open) {
+	        ReactStripeCheckout.stripeHandler.close();
+	      }
+	
+	      var ComponentClass = this.props.ComponentClass;
+	
+	      if (this.props.children) {
+	        return _react2.default.createElement(ComponentClass, _extends({}, _defineProperty({}, this.props.triggerEvent, this.onClick), {
+	          children: this.props.children
+	        }));
+	      }
+	      return this.props.disabled ? this.renderDisabledButton() : this.renderDefaultStripeButton();
+	    }
+	  }]);
+	
+	  return ReactStripeCheckout;
+	}(_react2.default.Component);
+	
+	ReactStripeCheckout.defaultProps = {
+	  className: 'StripeCheckout',
+	  label: 'Pay With Card',
+	  locale: 'auto',
+	  ComponentClass: 'span',
+	  reconfigureOnUpdate: false,
+	  triggerEvent: 'onClick'
+	};
+	ReactStripeCheckout.propTypes = {
+	  // Opens / closes the checkout modal by value
+	  // WARNING: does not work on mobile due to browser security restrictions
+	  // NOTE: Must be set to false when receiving token to prevent modal from
+	  //       opening automatically after closing
+	  desktopShowModal: _propTypes2.default.bool,
+	
+	  triggerEvent: _propTypes2.default.oneOf(['onClick', 'onTouchTap', 'onTouchStart']),
+	
+	  // If included, will render the default blue button with label text.
+	  // (Requires including stripe-checkout.css or adding the .styl file
+	  // to your pipeline)
+	  label: _propTypes2.default.string,
+	
+	  // Custom styling for default button
+	  style: _propTypes2.default.object,
+	  // Custom styling for <span> tag inside default button
+	  textStyle: _propTypes2.default.object,
+	
+	  // Prevents any events from opening the popup
+	  // Adds the disabled prop to the button and adjusts the styling as well
+	  disabled: _propTypes2.default.bool,
+	
+	  // Named component to wrap button (eg. div)
+	  ComponentClass: _propTypes2.default.string,
+	
+	  // Show a loading indicator
+	  showLoadingDialog: _propTypes2.default.func,
+	  // Hide the loading indicator
+	  hideLoadingDialog: _propTypes2.default.func,
+	
+	  // Run this method when the scrupt fails to load. Will run if the internet
+	  // connection is offline when attemting to load the script.
+	  onScriptError: _propTypes2.default.func,
+	
+	  // Runs when the script tag is created, but before it is added to the DOM
+	  onScriptTagCreated: _propTypes2.default.func,
+	
+	  // By default, any time the React component is updated, it will call
+	  // StripeCheckout.configure, which may result in additional XHR calls to the
+	  // stripe API.  If you know the first configuration is all you need, you
+	  // can set this to false.  Subsequent updates will affect the StripeCheckout.open
+	  // (e.g. different prices)
+	  reconfigureOnUpdate: _propTypes2.default.bool,
+	
+	  // =====================================================
+	  // Required by stripe
+	  // see Stripe docs for more info:
+	  //   https://stripe.com/docs/checkout#integration-custom
+	  // =====================================================
+	
+	  // Your publishable key (test or live).
+	  // can't use "key" as a prop in react, so have to change the keyname
+	  stripeKey: _propTypes2.default.string.isRequired,
+	
+	  // The callback to invoke when the Checkout process is complete.
+	  //   function(token)
+	  //     token is the token object created.
+	  //     token.id can be used to create a charge or customer.
+	  //     token.email contains the email address entered by the user.
+	  token: _propTypes2.default.func.isRequired,
+	
+	  // ==========================
+	  // Highly Recommended Options
+	  // ==========================
+	
+	  // Name of the company or website.
+	  name: _propTypes2.default.string,
+	
+	  // A description of the product or service being purchased.
+	  description: _propTypes2.default.string,
+	
+	  // A relative URL pointing to a square image of your brand or product. The
+	  // recommended minimum size is 128x128px. The recommended image types are
+	  // .gif, .jpeg, and .png.
+	  image: _propTypes2.default.string,
+	
+	  // The amount (in cents) that's shown to the user. Note that you will still
+	  // have to explicitly include it when you create a charge using the API.
+	  amount: _propTypes2.default.number,
+	
+	  // Specify auto to display Checkout in the user's preferred language, if
+	  // available. English will be used by default.
+	  //
+	  // https://stripe.com/docs/checkout#supported-languages
+	  // for more info.
+	  locale: _propTypes2.default.oneOf(['auto', // (Default) Automatically chosen by checkout
+	  'zh', // Simplified Chinese
+	  'da', // Danish
+	  'nl', // Dutch
+	  'en', // English
+	  'fr', // French
+	  'de', // German
+	  'it', // Italian
+	  'ja', // Japanease
+	  'no', // Norwegian
+	  'es', // Spanish
+	  'sv']),
+	
+	  // ==============
+	  // Optional Props
+	  // ==============
+	
+	  // The currency of the amount (3-letter ISO code). The default is USD.
+	  currency: _propTypes2.default.oneOf(['AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN', 'BAM', 'BBD', // eslint-disable-line comma-spacing
+	  'BDT', 'BGN', 'BIF', 'BMD', 'BND', 'BOB', 'BRL', 'BSD', 'BWP', 'BZD', 'CAD', 'CDF', // eslint-disable-line comma-spacing
+	  'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EEK', // eslint-disable-line comma-spacing
+	  'EGP', 'ETB', 'EUR', 'FJD', 'FKP', 'GBP', 'GEL', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', // eslint-disable-line comma-spacing
+	  'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JMD', 'JPY', 'KES', // eslint-disable-line comma-spacing
+	  'KGS', 'KHR', 'KMF', 'KRW', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LTL', // eslint-disable-line comma-spacing
+	  'LVL', 'MAD', 'MDL', 'MGA', 'MKD', 'MNT', 'MOP', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', // eslint-disable-line comma-spacing
+	  'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'PAB', 'PEN', 'PGK', 'PHP', // eslint-disable-line comma-spacing
+	  'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SEK', // eslint-disable-line comma-spacing
+	  'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'STD', 'SVC', 'SZL', 'THB', 'TJS', 'TOP', 'TRY', // eslint-disable-line comma-spacing
+	  'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', // eslint-disable-line comma-spacing
+	  'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW']),
+	
+	  // The label of the payment button in the Checkout form (e.g. “Subscribe”,
+	  // “Pay {{amount}}”, etc.). If you include {{amount}}, it will be replaced
+	  // by the provided amount. Otherwise, the amount will be appended to the
+	  // end of your label.
+	  panelLabel: _propTypes2.default.string,
+	
+	  // Specify whether Checkout should validate the billing ZIP code (true or
+	  // false)
+	  zipCode: _propTypes2.default.bool,
+	
+	  // Specify whether Checkout should collect the user's billing address
+	  // (true or false). The default is false.
+	  billingAddress: _propTypes2.default.bool,
+	
+	  // Specify whether Checkout should collect the user's shipping address
+	  // (true or false). The default is false.
+	  shippingAddress: _propTypes2.default.bool,
+	
+	  // Specify whether Checkout should validate the billing ZIP code (true or
+	  // false). The default is false.
+	  email: _propTypes2.default.string,
+	
+	  // Specify whether to include the option to "Remember Me" for future
+	  // purchases (true or false). The default is true.
+	  allowRememberMe: _propTypes2.default.bool,
+	
+	  // Specify whether to accept Bitcoin in Checkout. The default is false.
+	  bitcoin: _propTypes2.default.bool,
+	
+	  // Specify whether to accept Alipay ('auto', true, or false). The default
+	  // is false.
+	  alipay: _propTypes2.default.oneOf(['auto', true, false]),
+	
+	  // Specify if you need reusable access to the customer's Alipay account
+	  // (true or false). The default is false.
+	  alipayReusable: _propTypes2.default.bool,
+	
+	  // function() The callback to invoke when Checkout is opened (not supported
+	  // in IE6 and IE7).
+	  opened: _propTypes2.default.func,
+	
+	  // function() The callback to invoke when Checkout is closed (not supported
+	  // in IE6 and IE7).
+	  closed: _propTypes2.default.func
+	};
+	exports.default = ReactStripeCheckout;
+
 
 /***/ }),
-/* 522 */
+/* 526 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  individualItems: [{
+	    url: "Aftershock_White.jpg",
+	    name: "Aftershock White",
+	    description: "Shirt",
+	    priceOptions: {
+	      small: 7.00,
+	      medium: 9.00,
+	      large: 11.00
+	    }
+	  }, {
+	    url: "BBVB_Navy.jpg",
+	    name: "BBVB Navy",
+	    description: "Shirt",
+	    priceOptions: {
+	      small: 7.00,
+	      medium: 9.00,
+	      large: 11.00
+	    }
+	  }, {
+	    url: "Gangsta_Tank.jpg",
+	    name: "Gangsta Tank",
+	    description: "Shirt",
+	    priceOptions: {
+	      small: 7.00,
+	      medium: 9.00,
+	      large: 11.00
+	    }
+	  }, {
+	    url: "Infinity_Salon_(Neon).jpg",
+	    name: "Infinity Salon",
+	    description: "Shirt",
+	    priceOptions: {
+	      small: 7.00,
+	      medium: 9.00,
+	      large: 11.00
+	    }
+	  }, {
+	    url: "Splish_Splash_Volunteers_2017.jpg",
+	    name: "Splish Splash",
+	    description: "Shirt",
+	    priceOptions: {
+	      small: 7.00,
+	      medium: 9.00,
+	      large: 11.00
+	    }
+	  }, {
+	    url: "Team_Jessica_Back.jpg",
+	    name: "Team Jessica",
+	    description: "Shirt",
+	    priceOptions: {
+	      small: 7.00,
+	      medium: 9.00,
+	      large: 11.00
+	    }
+	  }],
+	  organizations: [{
+	    organization: "IH",
+	    logo: "IHHS_Logo.jpg",
+	    products: [{
+	      url: "Dark Heather Back Revised.jpg",
+	      name: "1",
+	      description: "Shirt",
+	      priceOptions: {
+	        small: 7.00,
+	        medium: 9.00,
+	        large: 11.00
+	      }
+	    }, {
+	      url: "Dark Heather Zip up revised.jpg",
+	      name: "2",
+	      description: "Shirt",
+	      priceOptions: {
+	        small: 7.00,
+	        medium: 9.00,
+	        large: 11.00
+	      }
+	    }, {
+	      url: "IH Crew Royal Revised.jpg",
+	      name: "3",
+	      description: "Shirt",
+	      priceOptions: {
+	        small: 7.00,
+	        medium: 9.00,
+	        large: 11.00
+	      }
+	    }, {
+	      url: "IH Sport Gret Revised.jpg",
+	      name: "4",
+	      description: "Shirt",
+	      priceOptions: {
+	        small: 7.00,
+	        medium: 9.00,
+	        large: 11.00
+	      }
+	    }]
+	  }, {
+	    organization: "FSHA",
+	    logo: "FSHA_Logo.jpg",
+	    products: [{
+	      url: "FSHA Summer 2017 (Red).jpg",
+	      name: "1",
+	      description: "Shirt",
+	      priceOptions: {
+	        small: 7.00,
+	        medium: 9.00,
+	        large: 11.00
+	      }
+	    }, {
+	      url: "FSHA Summer 2017 College.jpg",
+	      name: "Aftershock White",
+	      description: "Shirt",
+	      priceOptions: {
+	        small: 7.00,
+	        medium: 9.00,
+	        large: 11.00
+	      }
+	    }, {
+	      url: "FSHA Summer 2017.jpg",
+	      name: "Aftershock White",
+	      description: "Shirt",
+	      priceOptions: {
+	        small: 7.00,
+	        medium: 9.00,
+	        large: 11.00
+	      }
+	    }]
+	  }]
+	};
+
+/***/ }),
+/* 527 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50110,68 +50793,50 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Donate = function (_Component) {
-	  _inherits(Donate, _Component);
+	var Items = function (_Component) {
+	  _inherits(Items, _Component);
 	
-	  function Donate() {
-	    _classCallCheck(this, Donate);
+	  function Items() {
+	    _classCallCheck(this, Items);
 	
-	    var _this = _possibleConstructorReturn(this, (Donate.__proto__ || Object.getPrototypeOf(Donate)).call(this));
+	    var _this = _possibleConstructorReturn(this, (Items.__proto__ || Object.getPrototypeOf(Items)).call(this));
 	
-	    _this.state = {
-	      incidents: []
+	    _this.state = {};
 	
-	      // this.onMarkerClick = this.onMarkerClick.bind(this);
-	    };return _this;
+	    _this.addToCart = _this.addToCart.bind(_this);
+	    return _this;
 	  }
 	
-	  _createClass(Donate, [{
+	  _createClass(Items, [{
+	    key: 'addToCart',
+	    value: function addToCart() {
+	      var _props = this.props,
+	          url = _props.url,
+	          index = _props.index,
+	          category = _props.category;
+	
+	      this.props.addToCart(url, index, category);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        'section',
-	        { id: 'donate', className: 'container content-section text-center' },
-	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'Donate'
-	        ),
+	        'div',
+	        { className: 'container columns' },
+	        _react2.default.createElement('img', { className: 'product-shirt', src: '/individualItems/' + this.props.url }),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'donation-information' },
-	          _react2.default.createElement(
-	            'h4',
-	            { className: 'donation-headings' },
-	            'Charity of the Month'
-	          ),
-	          _react2.default.createElement('img', { className: 'donation-shirt', src: 'https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/17022205_10154220739377611_6746995110482650659_n.jpg?oh=745ea1aadddc76fddd634062729f99c9&oe=59EA0E32' }),
-	          _react2.default.createElement(
-	            'h4',
-	            { className: 'donation-headings' },
-	            '#TeamJessica'
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            { className: 'donation-text' },
-	            'A wonderful organization has given us the opportunity to raise money for a cure for A-T by volunteering! Saturday, May 6 in Pomona and Saturday, June 10 San Bernardino #TeamJessica is being asked to provide 20 volunteers to serve at a family fun run type event. Plan to stay all day. Each person who serves will earn $50 towards the ATCP. Kids ages 12 -15 are welcome with a parent. Ages 16 and up do not need a parent. The organization needs a firm commitment from everyone who volunteers, so please make sure this works into your schedule.'
-	          ),
-	          _react2.default.createElement(
-	            'form',
-	            { action: 'https://www.paypal.com/cgi-bin/webscr', method: 'post', target: '_top' },
-	            _react2.default.createElement('input', { type: 'hidden', name: 'cmd', value: '_s-xclick' }),
-	            _react2.default.createElement('input', { type: 'hidden', name: 'hosted_button_id', value: '4A7EN4G4L4SUL' }),
-	            _react2.default.createElement('input', { type: 'image', src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif', name: 'submit', alt: 'PayPal - The safer, easier way to pay online!' }),
-	            _react2.default.createElement('img', { alt: '', src: 'https://www.paypalobjects.com/en_US/i/scr/pixel.gif', width: '1', height: '1' })
-	          )
+	          { className: 'btn btn-primary', onClick: this.addToCart },
+	          'Add To Cart'
 	        )
 	      );
 	    }
 	  }]);
 	
-	  return Donate;
+	  return Items;
 	}(_react.Component);
 	
-	exports.default = Donate;
+	exports.default = Items;
 
 /***/ })
 /******/ ]);

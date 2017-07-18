@@ -18,6 +18,11 @@ class Intro extends Component {
     return (
       <div className="intro">
         <div className="intro-body"></div>
+        <a href="#about" id="intro-button">
+          <div id="intro-button-container">
+          <i className="fa fa-angle-double-down animated"></i>
+          </div>
+        </a>
       </div>
     )
 

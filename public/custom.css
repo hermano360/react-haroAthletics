@@ -1,3 +1,6 @@
+
+/*Will have to fix and tweak this navbar business*/
+
 .navbar-custom {
   margin-bottom: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
@@ -63,6 +66,20 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   }
 }
+
+.section-content {
+  width: 80%;
+  margin-left: 10%;
+}
+
+
+body {
+  background-color: black;
+}
+
+
+
+
 .intro {
   display: table;
   width: 100%;
@@ -71,7 +88,7 @@
   text-align: center;
   color: white;
   background: url("haro_athletics_logo_new.png") no-repeat center scroll;
-  background-color: #000610;
+  background-color: black;
   -webkit-background-size: 75% auto;
   -moz-background-size: 75% auto;
   background-size: 75% auto;
@@ -79,17 +96,44 @@
 }
 .intro-body {
 
-    background-repeat: no-repeat;
+background-repeat: no-repeat;
 background-position: right top;
 background-attachment: fixed;
 background-size: auto 100%;
 }
 
+#intro-button {
+  margin-top: 75vh;
+  border-radius: 100% !important;
+  width: 65px;
+  height: 65px;
+  text-align: center;
+  vertical-align: middle;
+  z-index: 1000;
+  color: white;
+  font-size: 30px;
+  display: inline-block;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 4px solid white;
+  white-space: nowrap;
+  padding: 8px 8px;
+  line-height: 1.42857143;
+  border-radius: 40px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/*about section*/
+
 #about {
   display: table;
   width: 100%;
   height: 100vh;
-  padding: 50px 0 0 0;
+  padding: 50px 0 25px 0;
   text-align: center;
   color: white;
   background-color: black;
@@ -97,7 +141,44 @@ background-size: auto 100%;
   -moz-background-size: 75% auto;
   background-size: 75% auto;
   -o-background-size: 75% auto;
+  text-transform: uppercase;
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  letter-spacing: 1px;
 }
+
+h1,h2,h3,h4,h5, h6 {
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  letter-spacing: 1px;
+}
+
+.section-title {
+  font-size: 45px;
+  margin-bottom: 30px;
+}
+
+.section-body {
+  font-size: 12px;
+}
+
+.section-headings {
+  font-size: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#about-carousel {
+  margin: 45px 15% 40px 15%;
+  width:70%;
+}
+
+@media screen and (min-width: 720px) {
+  #about-carousel {
+    width: 50%;
+    margin: 40px 25% 40px 25%;
+  }
+}
+
+/*product section*/
 
 #products {
   display: table;
@@ -111,4 +192,32 @@ background-size: auto 100%;
   -moz-background-size: 75% auto;
   background-size: 75% auto;
   -o-background-size: 75% auto;
+}
+
+.inverse-color {
+  color:black;
+}
+.product-shirt {
+	width:100%;
+}
+
+/*donate section*/
+
+#donate {
+padding: 50px 0 25px 0;
+min-height: 100vh;
+}
+
+.donation-shirt {
+  position: relative;
+  width: 75%;
+}
+.donation-button {
+  margin-top: 20px;
+}
+
+/*footer section */
+
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
 }

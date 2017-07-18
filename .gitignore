@@ -1,2 +1,5 @@
 .DS_Store
 node_modules
+src/components/SampleComponents/
+react-express-stripe/
+react-express-stripe/backend/index.js
