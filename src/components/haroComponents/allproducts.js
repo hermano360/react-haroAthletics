@@ -5,9 +5,9 @@ module.exports ={
       name:"Aftershock White",
       description:"Shirt",
       priceOptions: {
-        small: 7.00,
-        medium: 9.00,
-        large: 11.00
+        Small: 7.00,
+        Medium: 9.00,
+        Large: 11.00
       }
     },
     {
@@ -15,9 +15,9 @@ module.exports ={
       name:"BBVB Navy",
       description:"Shirt",
       priceOptions: {
-        small: 7.00,
-        medium: 9.00,
-        large: 11.00
+        Small: 7.00,
+        Medium: 9.00,
+        Large: 11.00
       }
     },
     {
@@ -25,9 +25,9 @@ module.exports ={
       name:"Gangsta Tank",
       description:"Shirt",
       priceOptions: {
-        small: 7.00,
-        medium: 9.00,
-        large: 11.00
+        Small: 7.00,
+        Medium: 9.00,
+        Large: 11.00
       }
     },
     {
@@ -35,9 +35,9 @@ module.exports ={
       name:"Infinity Salon",
       description:"Shirt",
       priceOptions: {
-        small: 7.00,
-        medium: 9.00,
-        large: 11.00
+        Small: 7.00,
+        Medium: 9.00,
+        Large: 11.00
       }
     },
     {
@@ -45,9 +45,9 @@ module.exports ={
       name:"Splish Splash",
       description:"Shirt",
       priceOptions: {
-        small: 7.00,
-        medium: 9.00,
-        large: 11.00
+        Small: 7.00,
+        Medium: 9.00,
+        Large: 11.00
       }
     },
     {
@@ -55,9 +55,9 @@ module.exports ={
       name:"Team Jessica",
       description:"Shirt",
       priceOptions: {
-        small: 7.00,
-        medium: 9.00,
-        large: 11.00
+        Small: 7.00,
+        Medium: 9.00,
+        Large: 11.00
       }
     }
   ],
@@ -68,42 +68,42 @@ module.exports ={
       products:[
       {
         url:"Dark Heather Back Revised.jpg",
-        name:"1",
+        name:"Dark Heather Back",
         description:"Shirt",
         priceOptions: {
-          small: 7.00,
-          medium: 9.00,
-          large: 11.00
+          Small: 7.00,
+          Medium: 9.00,
+          Large: 11.00
         }
       },
       {
         url:"Dark Heather Zip up revised.jpg",
-        name:"2",
+        name:"Dark Heather Zip up",
         description:"Shirt",
         priceOptions: {
-          small: 7.00,
-          medium: 9.00,
-          large: 11.00
+          Small: 7.00,
+          Medium: 9.00,
+          Large: 11.00
         }
       },
       {
         url:"IH Crew Royal Revised.jpg",
-        name:"3",
+        name:"IH Crew Royal Revised",
         description:"Shirt",
         priceOptions: {
-          small: 7.00,
-          medium: 9.00,
-          large: 11.00
+          Small: 7.00,
+          Medium: 9.00,
+          Large: 11.00
         }
       },
       {
-        url:"IH Sport Gret Revised.jpg",
-        name:"4",
+        url:"IH Sport Grey Revised.jpg",
+        name:"IH Sport Grey Revised",
         description:"Shirt",
         priceOptions: {
-          small: 7.00,
-          medium: 9.00,
-          large: 11.00
+          Small: 7.00,
+          Medium: 9.00,
+          Large: 11.00
         }
       }
     ]
@@ -114,32 +114,32 @@ module.exports ={
         products: [
       {
         url:"FSHA Summer 2017 (Red).jpg",
-        name:"1",
+        name:"FSHA Summer 2017 (Red)",
         description:"Shirt",
         priceOptions: {
-          small: 7.00,
-          medium: 9.00,
-          large: 11.00
+          Small: 7.00,
+          Medium: 9.00,
+          Large: 11.00
         }
       },
       {
         url:"FSHA Summer 2017 College.jpg",
-        name:"Aftershock White",
+        name:"FSHA Summer 2017 College",
         description:"Shirt",
         priceOptions: {
-          small: 7.00,
-          medium: 9.00,
-          large: 11.00
+          Small: 7.00,
+          Medium: 9.00,
+          Large: 11.00
         }
       },
       {
         url:"FSHA Summer 2017.jpg",
-        name:"Aftershock White",
+        name:"FSHA Summer 2017",
         description:"Shirt",
         priceOptions: {
-          small: 7.00,
-          medium: 9.00,
-          large: 11.00
+          Small: 7.00,
+          Medium: 9.00,
+          Large: 11.00
         }
       }
     ]

@@ -16,9 +16,6 @@ var stripe = configureStripe('sk_test_Ln4I7mzcg3YZ0CwM3tOo5QWs');
 var app = express();
 const PORT = process.env.PORT || 3000;
 
-//making sure traffic is through http, if not converting to http because
-// openWeatherMap doesn't work with https
-
 app.use(express.static('public'));
 
 app.use(bodyParser.json());

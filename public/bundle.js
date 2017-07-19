@@ -22262,11 +22262,11 @@
 	
 	var _Products2 = _interopRequireDefault(_Products);
 	
-	var _Donate = __webpack_require__(496);
+	var _Donate = __webpack_require__(526);
 	
 	var _Donate2 = _interopRequireDefault(_Donate);
 	
-	var _Footer = __webpack_require__(497);
+	var _Footer = __webpack_require__(527);
 	
 	var _Footer2 = _interopRequireDefault(_Footer);
 	
@@ -22278,7 +22278,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var axios = __webpack_require__(498);
+	var axios = __webpack_require__(497);
 	
 	var Main = function (_Component) {
 	    _inherits(Main, _Component);
@@ -48174,17 +48174,21 @@
 	
 	var _superagent2 = _interopRequireDefault(_superagent);
 	
-	var _Checkout = __webpack_require__(524);
+	var _Checkout = __webpack_require__(496);
 	
 	var _Checkout2 = _interopRequireDefault(_Checkout);
 	
-	var _allProducts = __webpack_require__(526);
+	var _allProducts = __webpack_require__(524);
 	
 	var _allProducts2 = _interopRequireDefault(_allProducts);
 	
-	var _Items = __webpack_require__(527);
+	var _Items = __webpack_require__(525);
 	
 	var _Items2 = _interopRequireDefault(_Items);
+	
+	var _Organizations = __webpack_require__(528);
+	
+	var _Organizations2 = _interopRequireDefault(_Organizations);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -48207,29 +48211,175 @@
 	    _this.state = {
 	      checkoutTotal: 0,
 	      checkoutItems: [],
+	      cartItems: [],
+	      campaignItems: [],
+	      organization: '',
 	      view: "allProducts"
 	    };
 	    _this.addToCart = _this.addToCart.bind(_this);
+	    _this.goToCampaign = _this.goToCampaign.bind(_this);
+	    _this.backToMainScreen = _this.backToMainScreen.bind(_this);
+	    _this.goToCheckout = _this.goToCheckout.bind(_this);
+	    _this.renderCart = _this.renderCart.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(Products, [{
+	    key: 'backToMainScreen',
+	    value: function backToMainScreen() {
+	      this.setState({
+	        campaignItems: [],
+	        organization: '',
+	        view: 'allProducts'
+	      });
+	    }
+	  }, {
+	    key: 'renderCart',
+	    value: function renderCart() {
+	      var checkoutItems = this.state.checkoutItems;
+	
+	      return checkoutItems.map(function (item) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            item.name
+	          ),
+	          '-',
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            item.productOption
+	          ),
+	          '-',
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            item.qty
+	          ),
+	          '-',
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            '`$$',
+	            parseFloat(item.productPrice).toFixed(2),
+	            '`'
+	          )
+	        );
+	      });
+	    }
+	  }, {
+	    key: 'goToCheckout',
+	    value: function goToCheckout() {
+	      this.setState({
+	        view: 'checkout',
+	        campaignItems: [],
+	        organization: ''
+	      });
+	    }
+	  }, {
 	    key: 'addToCart',
-	    value: function addToCart(url, index, category) {
-	      if (category === "individualItems") {
-	        this.setState({
-	          checkoutItems: [].concat(_toConsumableArray(this.state.checkoutItems), [_allProducts2.default[category][index]])
+	    value: function addToCart(index, category, productOption, productPrice, name) {
+	      var checkoutItems = this.state.checkoutItems;
+	
+	      var repeatedItem = false;
+	      var updatedCheckoutItems = checkoutItems.map(function (item) {
+	        if (item.name === name && item.productOption === productOption) {
+	          repeatedItem = true;
+	          return {
+	            name: item.name,
+	            productOption: item.productOption,
+	            productPrice: item.productPrice,
+	            qty: item.qty + 1
+	          };
+	        } else {
+	          return {
+	            name: item.name,
+	            productOption: item.productOption,
+	            productPrice: item.productPrice,
+	            qty: item.qty
+	          };
+	        }
+	      });
+	      if (!repeatedItem) {
+	        updatedCheckoutItems.push({
+	          name: name,
+	          productOption: productOption,
+	          productPrice: productPrice,
+	          qty: 1
 	        });
 	      }
+	      this.setState({
+	        checkoutItems: [].concat(_toConsumableArray(updatedCheckoutItems))
+	      });
+	    }
+	  }, {
+	    key: 'goToCampaign',
+	    value: function goToCampaign(organization, logo, products) {
+	      this.setState({
+	        view: 'campaign',
+	        campaignItems: products,
+	        organization: organization
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 	
+	      var popoverClickRootClose = _react2.default.createElement(
+	        _reactBootstrap.Popover,
+	        { id: 'popover-trigger-click-root-close', title: 'Cart' },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            'Name'
+	          ),
+	          '-',
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            'Options'
+	          ),
+	          '-',
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            'Quantity'
+	          ),
+	          '-',
+	          _react2.default.createElement(
+	            'strong',
+	            null,
+	            'Price'
+	          )
+	        ),
+	        this.renderCart()
+	      );
+	
+	      var campaignItems = function campaignItems() {
+	        var campaignItems = _this2.state.campaignItems;
+	
+	        return campaignItems.map(function (item, index) {
+	          console.log(item);
+	          return _react2.default.createElement(_Items2.default, _extends({ key: item.url }, item, { index: index, category: "campaignItems", organization: _this2.state.organization, handleClick: _this2.addToCart, popoverClickRootClose: popoverClickRootClose }));
+	        });
+	      };
+	
+	      var organizationsView = function organizationsView() {
+	        return _allProducts2.default.organizations.map(function (item, index) {
+	          return _react2.default.createElement(_Organizations2.default, _extends({ key: item.organization }, item, { index: index, category: "organization", goToCampaign: _this2.goToCampaign }));
+	        });
+	      };
+	
 	      var individualItemsView = function individualItemsView() {
 	        return _allProducts2.default.individualItems.map(function (item, index) {
-	          return _react2.default.createElement(_Items2.default, _extends({ key: item.url }, item, { index: index, category: "individualItems", addToCart: _this2.addToCart }));
+	          return _react2.default.createElement(_Items2.default, _extends({ key: item.url }, item, { index: index, category: "individualItems", handleClick: _this2.addToCart, popoverClickRootClose: popoverClickRootClose }));
 	        });
 	      };
 	      if (this.state.view === 'allProducts') {
@@ -48249,44 +48399,54 @@
 	              { className: 'section-headings inverse-color' },
 	              'Current Campaigns'
 	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'container columns' },
-	              _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/FSHA/FSHA_Logo.jpg' }),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'btn btn-primary' },
-	                'Go To Campaign'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'container columns' },
-	              _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/IH/IHHS_Logo.jpg' }),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'btn btn-primary' },
-	                'Go To Campaign'
-	              )
-	            ),
+	            organizationsView(),
 	            _react2.default.createElement(
 	              'h4',
 	              { className: 'product-headings inverse-color' },
 	              'Individual Items'
 	            ),
 	            individualItemsView(),
-	            _react2.default.createElement(_Checkout2.default, {
-	              name: 'The Road to learn React',
-	              description: "Only the Book",
-	              amount: this.state.total
-	            })
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'btn btn-default', onClick: this.goToCheckout },
+	              'Checkout'
+	            )
 	          )
 	        );
-	      } else {
+	      } else if (this.state.view === 'campaign') {
 	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          'Alllll of my love'
+	          'section',
+	          { id: 'products', className: 'container-fluid content-section text-center inverse-color' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'section-content' },
+	            campaignItems(),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'btn btn-default', onClick: this.backToMainScreen },
+	              'Back to Main Screen'
+	            )
+	          )
+	        );
+	      } else if (this.state.view === 'checkout') {
+	        return _react2.default.createElement(
+	          'section',
+	          { id: 'products', className: 'container-fluid content-section text-center inverse-color' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'section-content' },
+	            _react2.default.createElement(_Checkout2.default, {
+	              name: 'HaroAthletics',
+	              description: JSON.stringify(this.state.checkoutItems),
+	              amount: 5,
+	              backToMainScreen: this.backToMainScreen
+	            }),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'btn btn-default', onClick: this.backToMainScreen },
+	              'Back to Main Screen'
+	            )
+	          )
 	        );
 	      }
 	    }
@@ -48313,11 +48473,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(237);
+	var _axios = __webpack_require__(497);
 	
-	var _superagent = __webpack_require__(229);
+	var _axios2 = _interopRequireDefault(_axios);
 	
-	var _superagent2 = _interopRequireDefault(_superagent);
+	var _reactStripeCheckout = __webpack_require__(523);
+	
+	var _reactStripeCheckout2 = _interopRequireDefault(_reactStripeCheckout);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -48327,179 +48489,84 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Donate = function (_Component) {
-	  _inherits(Donate, _Component);
+	var Checkout = function (_Component) {
+	  _inherits(Checkout, _Component);
 	
-	  function Donate() {
-	    _classCallCheck(this, Donate);
+	  function Checkout() {
+	    _classCallCheck(this, Checkout);
 	
-	    var _this = _possibleConstructorReturn(this, (Donate.__proto__ || Object.getPrototypeOf(Donate)).call(this));
+	    var _this = _possibleConstructorReturn(this, (Checkout.__proto__ || Object.getPrototypeOf(Checkout)).call(this));
 	
-	    _this.state = {
-	      incidents: []
+	    _this.state = {};
 	
-	      // this.onMarkerClick = this.onMarkerClick.bind(this);
-	    };return _this;
+	    // this.onMarkerClick = this.onMarkerClick.bind(this);
+	    return _this;
 	  }
 	
-	  _createClass(Donate, [{
+	  _createClass(Checkout, [{
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement(
-	        'section',
-	        { id: 'donate', className: 'container content-section text-center' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'section-content' },
-	          _react2.default.createElement(
-	            'h2',
-	            { className: 'section-title' },
-	            'Donate'
-	          ),
-	          _react2.default.createElement(
-	            'h4',
-	            { className: 'section-heading' },
-	            'Charity of the Month'
-	          ),
-	          _react2.default.createElement('img', { className: 'donation-shirt', src: 'https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/17022205_10154220739377611_6746995110482650659_n.jpg?oh=745ea1aadddc76fddd634062729f99c9&oe=59EA0E32' }),
-	          _react2.default.createElement(
-	            'h4',
-	            { className: 'section-headings' },
-	            '#TeamJessica'
-	          ),
-	          _react2.default.createElement(
-	            'h6',
-	            { className: 'section-body' },
-	            'A wonderful organization has given us the opportunity to raise money for a cure for A-T by volunteering! Saturday, May 6 in Pomona and Saturday, June 10 San Bernardino #TeamJessica is being asked to provide 20 volunteers to serve at a family fun run type event. Plan to stay all day. Each person who serves will earn $50 towards the ATCP. Kids ages 12 -15 are welcome with a parent. Ages 16 and up do not need a parent. The organization needs a firm commitment from everyone who volunteers, so please make sure this works into your schedule.'
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'donation-button' },
-	            _react2.default.createElement(
-	              'form',
-	              { action: 'https://www.paypal.com/cgi-bin/webscr', method: 'post', target: '_top' },
-	              _react2.default.createElement('input', { type: 'hidden', name: 'cmd', value: '_s-xclick' }),
-	              _react2.default.createElement('input', { type: 'hidden', name: 'hosted_button_id', value: '4A7EN4G4L4SUL' }),
-	              _react2.default.createElement('input', { type: 'image', src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif', name: 'submit', alt: 'PayPal - The safer, easier way to pay online!' }),
-	              _react2.default.createElement('img', { alt: '', src: 'https://www.paypalobjects.com/en_US/i/scr/pixel.gif', width: '1', height: '1' })
-	            )
-	          )
-	        )
-	      );
+	      var _this2 = this;
+	
+	      var CURRENCY = 'USD';
+	
+	      var fromEuroToCent = function fromEuroToCent(amount) {
+	        return amount * 100;
+	      };
+	
+	      var successPayment = function successPayment(data) {
+	        _this2.props.backToMainScreen();
+	      };
+	
+	      var errorPayment = function errorPayment(data) {
+	        console.log(data);
+	        alert('Payment Error');
+	      };
+	      var onToken = function onToken(amount, description) {
+	        return function (token) {
+	          return _axios2.default.post('/checkout', {
+	            description: description,
+	            source: token.id,
+	            currency: CURRENCY,
+	            amount: fromEuroToCent(amount)
+	          }).then(successPayment).catch(errorPayment);
+	        };
+	      };
+	
+	      return _react2.default.createElement(_reactStripeCheckout2.default, {
+	        name: this.props.name,
+	        description: this.props.description,
+	        amount: fromEuroToCent(this.props.amount),
+	        token: onToken(this.props.amount, this.props.description),
+	        currency: CURRENCY,
+	        stripeKey: 'pk_test_isqamEERLx0pQJVekIgO9Njy',
+	        shippingAddress: true,
+	        billingAddress: true
+	      });
 	    }
 	  }]);
 	
-	  return Donate;
+	  return Checkout;
 	}(_react.Component);
 	
-	exports.default = Donate;
+	exports.default = Checkout;
 
 /***/ }),
 /* 497 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactBootstrap = __webpack_require__(237);
-	
-	var _superagent = __webpack_require__(229);
-	
-	var _superagent2 = _interopRequireDefault(_superagent);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Footer = function (_Component) {
-	  _inherits(Footer, _Component);
-	
-	  function Footer() {
-	    _classCallCheck(this, Footer);
-	
-	    var _this = _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).call(this));
-	
-	    _this.state = {
-	      incidents: []
-	
-	      // this.onMarkerClick = this.onMarkerClick.bind(this);
-	    };return _this;
-	  }
-	
-	  _createClass(Footer, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'footer',
-	        null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'container text-center contact-footer' },
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'Copyright \xA9 HaroAthletics 2017'
-	          ),
-	          _react2.default.createElement(
-	            'h7',
-	            null,
-	            'Contact'
-	          ),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            _react2.default.createElement(
-	              'a',
-	              { href: 'mailto:feedback@startbootstrap.com' },
-	              'rubenharo@gmail.com'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            '765-543-6543'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-	
-	  return Footer;
-	}(_react.Component);
-	
-	exports.default = Footer;
+	module.exports = __webpack_require__(498);
 
 /***/ }),
 /* 498 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(499);
-
-/***/ }),
-/* 499 */
-/***/ (function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
-	var utils = __webpack_require__(500);
-	var bind = __webpack_require__(501);
-	var Axios = __webpack_require__(503);
-	var defaults = __webpack_require__(504);
+	var utils = __webpack_require__(499);
+	var bind = __webpack_require__(500);
+	var Axios = __webpack_require__(502);
+	var defaults = __webpack_require__(503);
 	
 	/**
 	 * Create an instance of Axios
@@ -48532,15 +48599,15 @@
 	};
 	
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(521);
-	axios.CancelToken = __webpack_require__(522);
-	axios.isCancel = __webpack_require__(518);
+	axios.Cancel = __webpack_require__(520);
+	axios.CancelToken = __webpack_require__(521);
+	axios.isCancel = __webpack_require__(517);
 	
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(523);
+	axios.spread = __webpack_require__(522);
 	
 	module.exports = axios;
 	
@@ -48549,13 +48616,13 @@
 
 
 /***/ }),
-/* 500 */
+/* 499 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var bind = __webpack_require__(501);
-	var isBuffer = __webpack_require__(502);
+	var bind = __webpack_require__(500);
+	var isBuffer = __webpack_require__(501);
 	
 	/*global toString:true*/
 	
@@ -48858,7 +48925,7 @@
 
 
 /***/ }),
-/* 501 */
+/* 500 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48875,7 +48942,7 @@
 
 
 /***/ }),
-/* 502 */
+/* 501 */
 /***/ (function(module, exports) {
 
 	/*!
@@ -48902,17 +48969,17 @@
 
 
 /***/ }),
-/* 503 */
+/* 502 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var defaults = __webpack_require__(504);
-	var utils = __webpack_require__(500);
-	var InterceptorManager = __webpack_require__(515);
-	var dispatchRequest = __webpack_require__(516);
-	var isAbsoluteURL = __webpack_require__(519);
-	var combineURLs = __webpack_require__(520);
+	var defaults = __webpack_require__(503);
+	var utils = __webpack_require__(499);
+	var InterceptorManager = __webpack_require__(514);
+	var dispatchRequest = __webpack_require__(515);
+	var isAbsoluteURL = __webpack_require__(518);
+	var combineURLs = __webpack_require__(519);
 	
 	/**
 	 * Create a new instance of Axios
@@ -48994,13 +49061,13 @@
 
 
 /***/ }),
-/* 504 */
+/* 503 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(500);
-	var normalizeHeaderName = __webpack_require__(505);
+	var utils = __webpack_require__(499);
+	var normalizeHeaderName = __webpack_require__(504);
 	
 	var DEFAULT_CONTENT_TYPE = {
 	  'Content-Type': 'application/x-www-form-urlencoded'
@@ -49016,10 +49083,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(506);
+	    adapter = __webpack_require__(505);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(506);
+	    adapter = __webpack_require__(505);
 	  }
 	  return adapter;
 	}
@@ -49093,12 +49160,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 505 */
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
+	var utils = __webpack_require__(499);
 	
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -49111,18 +49178,18 @@
 
 
 /***/ }),
-/* 506 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(500);
-	var settle = __webpack_require__(507);
-	var buildURL = __webpack_require__(510);
-	var parseHeaders = __webpack_require__(511);
-	var isURLSameOrigin = __webpack_require__(512);
-	var createError = __webpack_require__(508);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(513);
+	var utils = __webpack_require__(499);
+	var settle = __webpack_require__(506);
+	var buildURL = __webpack_require__(509);
+	var parseHeaders = __webpack_require__(510);
+	var isURLSameOrigin = __webpack_require__(511);
+	var createError = __webpack_require__(507);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(512);
 	
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -49219,7 +49286,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(514);
+	      var cookies = __webpack_require__(513);
 	
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -49298,12 +49365,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 507 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var createError = __webpack_require__(508);
+	var createError = __webpack_require__(507);
 	
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -49330,12 +49397,12 @@
 
 
 /***/ }),
-/* 508 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var enhanceError = __webpack_require__(509);
+	var enhanceError = __webpack_require__(508);
 	
 	/**
 	 * Create an Error with the specified message, config, error code, request and response.
@@ -49354,7 +49421,7 @@
 
 
 /***/ }),
-/* 509 */
+/* 508 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49381,12 +49448,12 @@
 
 
 /***/ }),
-/* 510 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
+	var utils = __webpack_require__(499);
 	
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -49455,12 +49522,12 @@
 
 
 /***/ }),
-/* 511 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
+	var utils = __webpack_require__(499);
 	
 	/**
 	 * Parse headers into an object
@@ -49498,12 +49565,12 @@
 
 
 /***/ }),
-/* 512 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
+	var utils = __webpack_require__(499);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -49572,7 +49639,7 @@
 
 
 /***/ }),
-/* 513 */
+/* 512 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49614,12 +49681,12 @@
 
 
 /***/ }),
-/* 514 */
+/* 513 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
+	var utils = __webpack_require__(499);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -49673,12 +49740,12 @@
 
 
 /***/ }),
-/* 515 */
+/* 514 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
+	var utils = __webpack_require__(499);
 	
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -49731,15 +49798,15 @@
 
 
 /***/ }),
-/* 516 */
+/* 515 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
-	var transformData = __webpack_require__(517);
-	var isCancel = __webpack_require__(518);
-	var defaults = __webpack_require__(504);
+	var utils = __webpack_require__(499);
+	var transformData = __webpack_require__(516);
+	var isCancel = __webpack_require__(517);
+	var defaults = __webpack_require__(503);
 	
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -49816,12 +49883,12 @@
 
 
 /***/ }),
-/* 517 */
+/* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(500);
+	var utils = __webpack_require__(499);
 	
 	/**
 	 * Transform the data for a request or a response
@@ -49842,7 +49909,7 @@
 
 
 /***/ }),
-/* 518 */
+/* 517 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49853,7 +49920,7 @@
 
 
 /***/ }),
-/* 519 */
+/* 518 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49873,7 +49940,7 @@
 
 
 /***/ }),
-/* 520 */
+/* 519 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49893,7 +49960,7 @@
 
 
 /***/ }),
-/* 521 */
+/* 520 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -49918,12 +49985,12 @@
 
 
 /***/ }),
-/* 522 */
+/* 521 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Cancel = __webpack_require__(521);
+	var Cancel = __webpack_require__(520);
 	
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -49981,7 +50048,7 @@
 
 
 /***/ }),
-/* 523 */
+/* 522 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -50014,82 +50081,7 @@
 
 
 /***/ }),
-/* 524 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _axios = __webpack_require__(498);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _reactStripeCheckout = __webpack_require__(525);
-	
-	var _reactStripeCheckout2 = _interopRequireDefault(_reactStripeCheckout);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// import STRIPE_PUBLISHABLE from './constants/stripe';
-	// import PAYMENT_SERVER_URL from './constants/server';
-	
-	var CURRENCY = 'USD';
-	
-	var fromEuroToCent = function fromEuroToCent(amount) {
-	  return amount * 100;
-	};
-	
-	var successPayment = function successPayment(data) {};
-	
-	var errorPayment = function errorPayment(data) {
-	  console.log(data);
-	  alert('Payment Error');
-	};
-	
-	var onToken = function onToken(amount, description) {
-	  return function (token) {
-	    return _axios2.default.post('/checkout', {
-	      description: description,
-	      source: token.id,
-	      currency: CURRENCY,
-	      amount: fromEuroToCent(amount)
-	    }).then(successPayment).catch(errorPayment);
-	  };
-	};
-	
-	var Checkout = function Checkout(_ref) {
-	  var name = _ref.name,
-	      description = _ref.description,
-	      amount = _ref.amount;
-	  return _react2.default.createElement(
-	    _reactStripeCheckout2.default,
-	    {
-	      name: name,
-	      description: description,
-	      amount: fromEuroToCent(amount),
-	      token: onToken(amount, description),
-	      currency: CURRENCY,
-	      stripeKey: 'pk_test_isqamEERLx0pQJVekIgO9Njy'
-	    },
-	    _react2.default.createElement(
-	      'button',
-	      { className: 'btn btn-default' },
-	      'Checkout'
-	    )
-	  );
-	};
-	
-	exports.default = Checkout;
-
-/***/ }),
-/* 525 */
+/* 523 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50628,7 +50620,7 @@
 
 
 /***/ }),
-/* 526 */
+/* 524 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -50639,54 +50631,54 @@
 	    name: "Aftershock White",
 	    description: "Shirt",
 	    priceOptions: {
-	      small: 7.00,
-	      medium: 9.00,
-	      large: 11.00
+	      Small: 7.00,
+	      Medium: 9.00,
+	      Large: 11.00
 	    }
 	  }, {
 	    url: "BBVB_Navy.jpg",
 	    name: "BBVB Navy",
 	    description: "Shirt",
 	    priceOptions: {
-	      small: 7.00,
-	      medium: 9.00,
-	      large: 11.00
+	      Small: 7.00,
+	      Medium: 9.00,
+	      Large: 11.00
 	    }
 	  }, {
 	    url: "Gangsta_Tank.jpg",
 	    name: "Gangsta Tank",
 	    description: "Shirt",
 	    priceOptions: {
-	      small: 7.00,
-	      medium: 9.00,
-	      large: 11.00
+	      Small: 7.00,
+	      Medium: 9.00,
+	      Large: 11.00
 	    }
 	  }, {
 	    url: "Infinity_Salon_(Neon).jpg",
 	    name: "Infinity Salon",
 	    description: "Shirt",
 	    priceOptions: {
-	      small: 7.00,
-	      medium: 9.00,
-	      large: 11.00
+	      Small: 7.00,
+	      Medium: 9.00,
+	      Large: 11.00
 	    }
 	  }, {
 	    url: "Splish_Splash_Volunteers_2017.jpg",
 	    name: "Splish Splash",
 	    description: "Shirt",
 	    priceOptions: {
-	      small: 7.00,
-	      medium: 9.00,
-	      large: 11.00
+	      Small: 7.00,
+	      Medium: 9.00,
+	      Large: 11.00
 	    }
 	  }, {
 	    url: "Team_Jessica_Back.jpg",
 	    name: "Team Jessica",
 	    description: "Shirt",
 	    priceOptions: {
-	      small: 7.00,
-	      medium: 9.00,
-	      large: 11.00
+	      Small: 7.00,
+	      Medium: 9.00,
+	      Large: 11.00
 	    }
 	  }],
 	  organizations: [{
@@ -50694,39 +50686,39 @@
 	    logo: "IHHS_Logo.jpg",
 	    products: [{
 	      url: "Dark Heather Back Revised.jpg",
-	      name: "1",
+	      name: "Dark Heather Back",
 	      description: "Shirt",
 	      priceOptions: {
-	        small: 7.00,
-	        medium: 9.00,
-	        large: 11.00
+	        Small: 7.00,
+	        Medium: 9.00,
+	        Large: 11.00
 	      }
 	    }, {
 	      url: "Dark Heather Zip up revised.jpg",
-	      name: "2",
+	      name: "Dark Heather Zip up",
 	      description: "Shirt",
 	      priceOptions: {
-	        small: 7.00,
-	        medium: 9.00,
-	        large: 11.00
+	        Small: 7.00,
+	        Medium: 9.00,
+	        Large: 11.00
 	      }
 	    }, {
 	      url: "IH Crew Royal Revised.jpg",
-	      name: "3",
+	      name: "IH Crew Royal Revised",
 	      description: "Shirt",
 	      priceOptions: {
-	        small: 7.00,
-	        medium: 9.00,
-	        large: 11.00
+	        Small: 7.00,
+	        Medium: 9.00,
+	        Large: 11.00
 	      }
 	    }, {
-	      url: "IH Sport Gret Revised.jpg",
-	      name: "4",
+	      url: "IH Sport Grey Revised.jpg",
+	      name: "IH Sport Grey Revised",
 	      description: "Shirt",
 	      priceOptions: {
-	        small: 7.00,
-	        medium: 9.00,
-	        large: 11.00
+	        Small: 7.00,
+	        Medium: 9.00,
+	        Large: 11.00
 	      }
 	    }]
 	  }, {
@@ -50734,37 +50726,37 @@
 	    logo: "FSHA_Logo.jpg",
 	    products: [{
 	      url: "FSHA Summer 2017 (Red).jpg",
-	      name: "1",
+	      name: "FSHA Summer 2017 (Red)",
 	      description: "Shirt",
 	      priceOptions: {
-	        small: 7.00,
-	        medium: 9.00,
-	        large: 11.00
+	        Small: 7.00,
+	        Medium: 9.00,
+	        Large: 11.00
 	      }
 	    }, {
 	      url: "FSHA Summer 2017 College.jpg",
-	      name: "Aftershock White",
+	      name: "FSHA Summer 2017 College",
 	      description: "Shirt",
 	      priceOptions: {
-	        small: 7.00,
-	        medium: 9.00,
-	        large: 11.00
+	        Small: 7.00,
+	        Medium: 9.00,
+	        Large: 11.00
 	      }
 	    }, {
 	      url: "FSHA Summer 2017.jpg",
-	      name: "Aftershock White",
+	      name: "FSHA Summer 2017",
 	      description: "Shirt",
 	      priceOptions: {
-	        small: 7.00,
-	        medium: 9.00,
-	        large: 11.00
+	        Small: 7.00,
+	        Medium: 9.00,
+	        Large: 11.00
 	      }
 	    }]
 	  }]
 	};
 
 /***/ }),
-/* 527 */
+/* 525 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50801,34 +50793,113 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Items.__proto__ || Object.getPrototypeOf(Items)).call(this));
 	
-	    _this.state = {};
+	    _this.state = {
+	      productOption: '',
+	      productPrice: 0,
+	      valid: false
+	    };
 	
-	    _this.addToCart = _this.addToCart.bind(_this);
+	    _this.handleClick = _this.handleClick.bind(_this);
+	    _this.renderPriceOptions = _this.renderPriceOptions.bind(_this);
+	    _this.testSelected = _this.testSelected.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(Items, [{
-	    key: 'addToCart',
-	    value: function addToCart() {
+	    key: 'handleClick',
+	    value: function handleClick() {
 	      var _props = this.props,
-	          url = _props.url,
 	          index = _props.index,
-	          category = _props.category;
+	          category = _props.category,
+	          name = _props.name;
+	      var _state = this.state,
+	          productOption = _state.productOption,
+	          productPrice = _state.productPrice;
 	
-	      this.props.addToCart(url, index, category);
+	      if (productPrice !== 0 && productOption !== "" && productOption !== "select") {
+	        this.props.handleClick(index, category, productOption, productPrice, name);
+	      }
+	    }
+	  }, {
+	    key: 'testSelected',
+	    value: function testSelected(evt) {
+	      evt.preventDefault();
+	      var productOption = evt.target.value;
+	      var productPrice = this.props.priceOptions[evt.target.value];
+	      if (productOption !== 'select') {
+	        this.setState({
+	          productOption: productOption,
+	          productPrice: productPrice,
+	          valid: true
+	        });
+	      } else {
+	        this.setState({
+	          productOption: "",
+	          productPrice: 0,
+	          valid: false
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'renderPriceOptions',
+	    value: function renderPriceOptions() {
+	      var priceOptions = this.props.priceOptions;
+	
+	      return Object.keys(priceOptions).map(function (option) {
+	        return _react2.default.createElement(
+	          'option',
+	          { value: option, key: priceOptions[option] },
+	          option
+	        );
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var category = void 0;
+	      if (this.props.category === 'individualItems') {
+	        category = 'individualItems';
+	      } else {
+	        category = 'organizations/' + this.props.organization + '/';
+	      }
+	      var addToCartButton = _react2.default.createElement('div', null);
+	      if (this.state.valid) {
+	        addToCartButton = _react2.default.createElement(
+	          _reactBootstrap.OverlayTrigger,
+	          { trigger: 'click', rootClose: true, placement: 'bottom', overlay: this.props.popoverClickRootClose },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'btn btn-primary', onClick: this.handleClick },
+	            'Add to Cart'
+	          )
+	        );
+	      } else {
+	        addToCartButton = _react2.default.createElement('div', null);
+	      }
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'container columns' },
-	        _react2.default.createElement('img', { className: 'product-shirt', src: '/individualItems/' + this.props.url }),
+	        _react2.default.createElement('img', { className: 'product-shirt', src: '/' + category + '/' + this.props.url }),
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'btn btn-primary', onClick: this.addToCart },
-	          'Add To Cart'
-	        )
+	          _reactBootstrap.FormGroup,
+	          { controlId: this.props.name },
+	          _react2.default.createElement(
+	            _reactBootstrap.ControlLabel,
+	            null,
+	            'Size'
+	          ),
+	          _react2.default.createElement(
+	            _reactBootstrap.FormControl,
+	            { ref: 'selected', componentClass: 'select', placeholder: 'select', onChange: this.testSelected },
+	            _react2.default.createElement(
+	              'option',
+	              { value: 'select' },
+	              'Select Size'
+	            ),
+	            this.renderPriceOptions()
+	          )
+	        ),
+	        addToCartButton
 	      );
 	    }
 	  }]);
@@ -50837,6 +50908,272 @@
 	}(_react.Component);
 	
 	exports.default = Items;
+
+/***/ }),
+/* 526 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Donate = function (_Component) {
+	  _inherits(Donate, _Component);
+	
+	  function Donate() {
+	    _classCallCheck(this, Donate);
+	
+	    var _this = _possibleConstructorReturn(this, (Donate.__proto__ || Object.getPrototypeOf(Donate)).call(this));
+	
+	    _this.state = {
+	      incidents: []
+	
+	      // this.onMarkerClick = this.onMarkerClick.bind(this);
+	    };return _this;
+	  }
+	
+	  _createClass(Donate, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'section',
+	        { id: 'donate', className: 'container content-section text-center' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'section-content' },
+	          _react2.default.createElement(
+	            'h2',
+	            { className: 'section-title' },
+	            'Donate'
+	          ),
+	          _react2.default.createElement(
+	            'h4',
+	            { className: 'section-heading' },
+	            'Charity of the Month'
+	          ),
+	          _react2.default.createElement('img', { className: 'donation-shirt', src: 'https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/17022205_10154220739377611_6746995110482650659_n.jpg?oh=745ea1aadddc76fddd634062729f99c9&oe=59EA0E32' }),
+	          _react2.default.createElement(
+	            'h4',
+	            { className: 'section-headings' },
+	            '#TeamJessica'
+	          ),
+	          _react2.default.createElement(
+	            'h6',
+	            { className: 'section-body' },
+	            'A wonderful organization has given us the opportunity to raise money for a cure for A-T by volunteering! Saturday, May 6 in Pomona and Saturday, June 10 San Bernardino #TeamJessica is being asked to provide 20 volunteers to serve at a family fun run type event. Plan to stay all day. Each person who serves will earn $50 towards the ATCP. Kids ages 12 -15 are welcome with a parent. Ages 16 and up do not need a parent. The organization needs a firm commitment from everyone who volunteers, so please make sure this works into your schedule.'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'donation-button' },
+	            _react2.default.createElement(
+	              'form',
+	              { action: 'https://www.paypal.com/cgi-bin/webscr', method: 'post', target: '_top' },
+	              _react2.default.createElement('input', { type: 'hidden', name: 'cmd', value: '_s-xclick' }),
+	              _react2.default.createElement('input', { type: 'hidden', name: 'hosted_button_id', value: '4A7EN4G4L4SUL' }),
+	              _react2.default.createElement('input', { type: 'image', src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif', name: 'submit', alt: 'PayPal - The safer, easier way to pay online!' }),
+	              _react2.default.createElement('img', { alt: '', src: 'https://www.paypalobjects.com/en_US/i/scr/pixel.gif', width: '1', height: '1' })
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Donate;
+	}(_react.Component);
+	
+	exports.default = Donate;
+
+/***/ }),
+/* 527 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Footer = function (_Component) {
+	  _inherits(Footer, _Component);
+	
+	  function Footer() {
+	    _classCallCheck(this, Footer);
+	
+	    var _this = _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).call(this));
+	
+	    _this.state = {
+	      incidents: []
+	
+	      // this.onMarkerClick = this.onMarkerClick.bind(this);
+	    };return _this;
+	  }
+	
+	  _createClass(Footer, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'footer',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container text-center contact-footer' },
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Copyright \xA9 HaroAthletics 2017'
+	          ),
+	          _react2.default.createElement(
+	            'h7',
+	            null,
+	            'Contact'
+	          ),
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              'a',
+	              { href: 'mailto:feedback@startbootstrap.com' },
+	              'rubenharo@gmail.com'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '765-543-6543'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Footer;
+	}(_react.Component);
+	
+	exports.default = Footer;
+
+/***/ }),
+/* 528 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Organizations = function (_Component) {
+	  _inherits(Organizations, _Component);
+	
+	  function Organizations() {
+	    _classCallCheck(this, Organizations);
+	
+	    var _this = _possibleConstructorReturn(this, (Organizations.__proto__ || Object.getPrototypeOf(Organizations)).call(this));
+	
+	    _this.state = {};
+	
+	    _this.goToCampaign = _this.goToCampaign.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(Organizations, [{
+	    key: 'goToCampaign',
+	    value: function goToCampaign() {
+	      var _props = this.props,
+	          organization = _props.organization,
+	          logo = _props.logo,
+	          products = _props.products;
+	
+	      this.props.goToCampaign(organization, logo, products);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props2 = this.props,
+	          organization = _props2.organization,
+	          logo = _props2.logo;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container columns' },
+	        _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/' + organization + '/' + logo }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'btn btn-primary', onClick: this.goToCampaign },
+	          'Go To Campaign'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Organizations;
+	}(_react.Component);
+	
+	exports.default = Organizations;
 
 /***/ })
 /******/ ]);
