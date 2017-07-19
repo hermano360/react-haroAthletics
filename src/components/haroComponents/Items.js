@@ -18,10 +18,10 @@ class Items extends Component {
   }
 
   handleClick(){
-    let {index,category,name} = this.props;
+    let {index,category,name,organization} = this.props;
     let {productOption, productPrice} = this.state;
     if(productPrice !== 0 && productOption !== "" && productOption !== "select"){
-      this.props.handleClick(index,category, productOption, productPrice, name)
+      this.props.handleClick(index,category, productOption, productPrice, name,organization)
     }
   }
   testSelected(evt){

@@ -22262,11 +22262,11 @@
 	
 	var _Products2 = _interopRequireDefault(_Products);
 	
-	var _Donate = __webpack_require__(526);
+	var _Donate = __webpack_require__(527);
 	
 	var _Donate2 = _interopRequireDefault(_Donate);
 	
-	var _Footer = __webpack_require__(527);
+	var _Footer = __webpack_require__(528);
 	
 	var _Footer2 = _interopRequireDefault(_Footer);
 	
@@ -48186,9 +48186,17 @@
 	
 	var _Items2 = _interopRequireDefault(_Items);
 	
-	var _Organizations = __webpack_require__(528);
+	var _Organizations = __webpack_require__(526);
 	
 	var _Organizations2 = _interopRequireDefault(_Organizations);
+	
+	var _CartItem = __webpack_require__(529);
+	
+	var _CartItem2 = _interopRequireDefault(_CartItem);
+	
+	var _EditItemModal = __webpack_require__(530);
+	
+	var _EditItemModal2 = _interopRequireDefault(_EditItemModal);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -48211,16 +48219,19 @@
 	    _this.state = {
 	      checkoutTotal: 0,
 	      checkoutItems: [],
-	      cartItems: [],
 	      campaignItems: [],
 	      organization: '',
-	      view: "allProducts"
+	      view: "allProducts",
+	      logo: "",
+	      modalShow: false
 	    };
 	    _this.addToCart = _this.addToCart.bind(_this);
 	    _this.goToCampaign = _this.goToCampaign.bind(_this);
 	    _this.backToMainScreen = _this.backToMainScreen.bind(_this);
 	    _this.goToCheckout = _this.goToCheckout.bind(_this);
 	    _this.renderCart = _this.renderCart.bind(_this);
+	    _this.editItem = _this.editItem.bind(_this);
+	    _this.handleEditClick = _this.handleEditClick.bind(_this);
 	    return _this;
 	  }
 	
@@ -48263,11 +48274,17 @@
 	          _react2.default.createElement(
 	            'strong',
 	            null,
-	            '`$$',
-	            parseFloat(item.productPrice).toFixed(2),
-	            '`'
+	            '$',
+	            parseFloat(item.productPrice).toFixed(2)
 	          )
 	        );
+	      });
+	    }
+	  }, {
+	    key: 'handleEditClick',
+	    value: function handleEditClick(name, productOption) {
+	      this.setState({
+	        modalShow: true
 	      });
 	    }
 	  }, {
@@ -48281,7 +48298,7 @@
 	    }
 	  }, {
 	    key: 'addToCart',
-	    value: function addToCart(index, category, productOption, productPrice, name) {
+	    value: function addToCart(index, category, productOption, productPrice, name, organization) {
 	      var checkoutItems = this.state.checkoutItems;
 	
 	      var repeatedItem = false;
@@ -48292,14 +48309,18 @@
 	            name: item.name,
 	            productOption: item.productOption,
 	            productPrice: item.productPrice,
-	            qty: item.qty + 1
+	            qty: item.qty + 1,
+	            index: item.index,
+	            organization: item.organization
 	          };
 	        } else {
 	          return {
 	            name: item.name,
 	            productOption: item.productOption,
 	            productPrice: item.productPrice,
-	            qty: item.qty
+	            qty: item.qty,
+	            index: item.index,
+	            organization: item.organization
 	          };
 	        }
 	      });
@@ -48308,11 +48329,18 @@
 	          name: name,
 	          productOption: productOption,
 	          productPrice: productPrice,
-	          qty: 1
+	          qty: 1,
+	          index: index,
+	          organization: organization
 	        });
 	      }
+	      var checkoutTotal = 0;
+	      updatedCheckoutItems.forEach(function (item) {
+	        checkoutTotal += parseFloat(item.qty) * parseFloat(item.productPrice);
+	      });
 	      this.setState({
-	        checkoutItems: [].concat(_toConsumableArray(updatedCheckoutItems))
+	        checkoutItems: [].concat(_toConsumableArray(updatedCheckoutItems)),
+	        checkoutTotal: checkoutTotal.toFixed(2)
 	      });
 	    }
 	  }, {
@@ -48321,14 +48349,23 @@
 	      this.setState({
 	        view: 'campaign',
 	        campaignItems: products,
-	        organization: organization
+	        organization: organization,
+	        logo: logo
 	      });
 	    }
+	  }, {
+	    key: 'editItem',
+	    value: function editItem() {}
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 	
+	      var goToCheckoutButton = _react2.default.createElement(
+	        'div',
+	        { className: 'btn btn-default', onClick: this.goToCheckout },
+	        'Proceed to Checkout'
+	      );
 	      var popoverClickRootClose = _react2.default.createElement(
 	        _reactBootstrap.Popover,
 	        { id: 'popover-trigger-click-root-close', title: 'Cart' },
@@ -48361,6 +48398,13 @@
 	        ),
 	        this.renderCart()
 	      );
+	      var backToMainScreenButton = function backToMainScreenButton() {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'btn btn-default', onClick: _this2.backToMainScreen },
+	          'Back to Main Screen'
+	        );
+	      };
 	
 	      var campaignItems = function campaignItems() {
 	        var campaignItems = _this2.state.campaignItems;
@@ -48381,6 +48425,34 @@
 	        return _allProducts2.default.individualItems.map(function (item, index) {
 	          return _react2.default.createElement(_Items2.default, _extends({ key: item.url }, item, { index: index, category: "individualItems", handleClick: _this2.addToCart, popoverClickRootClose: popoverClickRootClose }));
 	        });
+	      };
+	
+	      var checkoutItemView = function checkoutItemView() {
+	        return _this2.state.checkoutItems.map(function (item) {
+	          var organization = "";
+	          if (item.organization) {
+	            organization = '(' + item.organization + ')';
+	          }
+	          return _react2.default.createElement(_CartItem2.default, { key: item.name, item: item, organization: organization, handleEditClick: _this2.handleEditClick });
+	        });
+	      };
+	      var checkoutItemViewTotal = function checkoutItemViewTotal() {
+	        return _react2.default.createElement(
+	          'tr',
+	          null,
+	          _react2.default.createElement(
+	            'td',
+	            { className: 'grandTotal' },
+	            'Grand Total'
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            '$',
+	            _this2.state.checkoutTotal
+	          ),
+	          _react2.default.createElement('td', null)
+	        );
 	      };
 	      if (this.state.view === 'allProducts') {
 	        return _react2.default.createElement(
@@ -48406,11 +48478,7 @@
 	              'Individual Items'
 	            ),
 	            individualItemsView(),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'btn btn-default', onClick: this.goToCheckout },
-	              'Checkout'
-	            )
+	            goToCheckoutButton
 	          )
 	        );
 	      } else if (this.state.view === 'campaign') {
@@ -48420,12 +48488,10 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'section-content' },
+	            backToMainScreenButton(),
+	            _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/' + this.state.organization + '/' + this.state.logo }),
 	            campaignItems(),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'btn btn-default', onClick: this.backToMainScreen },
-	              'Back to Main Screen'
-	            )
+	            goToCheckoutButton
 	          )
 	        );
 	      } else if (this.state.view === 'checkout') {
@@ -48435,17 +48501,61 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'section-content' },
+	            _react2.default.createElement(
+	              'h2',
+	              { className: 'section-title inverse-color' },
+	              'Checkout'
+	            ),
+	            backToMainScreenButton(),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'checkoutTable' },
+	              _react2.default.createElement(
+	                _reactBootstrap.Table,
+	                { responsive: true },
+	                _react2.default.createElement(
+	                  'thead',
+	                  null,
+	                  _react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    _react2.default.createElement(
+	                      'th',
+	                      null,
+	                      _react2.default.createElement(
+	                        'div',
+	                        { className: 'centerCell' },
+	                        'Description'
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      'th',
+	                      { className: 'centerCell' },
+	                      'Qty x Each = Price'
+	                    ),
+	                    _react2.default.createElement(
+	                      'th',
+	                      null,
+	                      _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'edit', onClick: function onClick() {
+	                          console.log(test);
+	                        } })
+	                    )
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'tbody',
+	                  null,
+	                  checkoutItemView(),
+	                  checkoutItemViewTotal()
+	                )
+	              )
+	            ),
 	            _react2.default.createElement(_Checkout2.default, {
 	              name: 'HaroAthletics',
 	              description: JSON.stringify(this.state.checkoutItems),
 	              amount: 5,
 	              backToMainScreen: this.backToMainScreen
-	            }),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'btn btn-default', onClick: this.backToMainScreen },
-	              'Back to Main Screen'
-	            )
+	            })
 	          )
 	        );
 	      }
@@ -50811,13 +50921,14 @@
 	      var _props = this.props,
 	          index = _props.index,
 	          category = _props.category,
-	          name = _props.name;
+	          name = _props.name,
+	          organization = _props.organization;
 	      var _state = this.state,
 	          productOption = _state.productOption,
 	          productPrice = _state.productPrice;
 	
 	      if (productPrice !== 0 && productOption !== "" && productOption !== "select") {
-	        this.props.handleClick(index, category, productOption, productPrice, name);
+	        this.props.handleClick(index, category, productOption, productPrice, name, organization);
 	      }
 	    }
 	  }, {
@@ -50939,6 +51050,85 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var Organizations = function (_Component) {
+	  _inherits(Organizations, _Component);
+	
+	  function Organizations() {
+	    _classCallCheck(this, Organizations);
+	
+	    var _this = _possibleConstructorReturn(this, (Organizations.__proto__ || Object.getPrototypeOf(Organizations)).call(this));
+	
+	    _this.state = {};
+	
+	    _this.goToCampaign = _this.goToCampaign.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(Organizations, [{
+	    key: 'goToCampaign',
+	    value: function goToCampaign() {
+	      var _props = this.props,
+	          organization = _props.organization,
+	          logo = _props.logo,
+	          products = _props.products;
+	
+	      this.props.goToCampaign(organization, logo, products);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props2 = this.props,
+	          organization = _props2.organization,
+	          logo = _props2.logo;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container columns' },
+	        _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/' + organization + '/' + logo }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'btn btn-primary', onClick: this.goToCampaign },
+	          'Go To Campaign'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Organizations;
+	}(_react.Component);
+	
+	exports.default = Organizations;
+
+/***/ }),
+/* 527 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	var Donate = function (_Component) {
 	  _inherits(Donate, _Component);
 	
@@ -51007,7 +51197,7 @@
 	exports.default = Donate;
 
 /***/ }),
-/* 527 */
+/* 528 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51097,7 +51287,7 @@
 	exports.default = Footer;
 
 /***/ }),
-/* 528 */
+/* 529 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51126,54 +51316,218 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Organizations = function (_Component) {
-	  _inherits(Organizations, _Component);
+	var CartItem = function (_Component) {
+	  _inherits(CartItem, _Component);
 	
-	  function Organizations() {
-	    _classCallCheck(this, Organizations);
+	  function CartItem() {
+	    _classCallCheck(this, CartItem);
 	
-	    var _this = _possibleConstructorReturn(this, (Organizations.__proto__ || Object.getPrototypeOf(Organizations)).call(this));
+	    var _this = _possibleConstructorReturn(this, (CartItem.__proto__ || Object.getPrototypeOf(CartItem)).call(this));
 	
 	    _this.state = {};
 	
-	    _this.goToCampaign = _this.goToCampaign.bind(_this);
+	    _this.onEditClick = _this.onEditClick.bind(_this);
 	    return _this;
 	  }
 	
-	  _createClass(Organizations, [{
-	    key: 'goToCampaign',
-	    value: function goToCampaign() {
+	  _createClass(CartItem, [{
+	    key: 'onEditClick',
+	    value: function onEditClick() {
 	      var _props = this.props,
-	          organization = _props.organization,
-	          logo = _props.logo,
-	          products = _props.products;
+	          name = _props.name,
+	          productOption = _props.productOption;
 	
-	      this.props.goToCampaign(organization, logo, products);
+	      this.props.handleEditClick(name, productOption);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props2 = this.props,
-	          organization = _props2.organization,
-	          logo = _props2.logo;
+	      var _props$item = this.props.item,
+	          name = _props$item.name,
+	          productOption = _props$item.productOption,
+	          qty = _props$item.qty,
+	          productPrice = _props$item.productPrice;
+	      var organization = this.props.organization;
 	
 	      return _react2.default.createElement(
-	        'div',
-	        { className: 'container columns' },
-	        _react2.default.createElement('img', { className: 'product-shirt', src: '/organizations/' + organization + '/' + logo }),
+	        'tr',
+	        null,
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'btn btn-primary', onClick: this.goToCampaign },
-	          'Go To Campaign'
+	          'td',
+	          null,
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'centerCell itemDescription' },
+	            name,
+	            ' - ',
+	            productOption,
+	            ' ',
+	            organization
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          qty,
+	          ' x $',
+	          productPrice.toFixed(2),
+	          ' = $',
+	          parseFloat(qty * productPrice).toFixed(2)
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'unchecked', onClick: this.onEditClick })
 	        )
 	      );
 	    }
 	  }]);
 	
-	  return Organizations;
+	  return CartItem;
 	}(_react.Component);
 	
-	exports.default = Organizations;
+	exports.default = CartItem;
+
+/***/ }),
+/* 530 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(237);
+	
+	var _superagent = __webpack_require__(229);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var EditItemModal = function (_Component) {
+	  _inherits(EditItemModal, _Component);
+	
+	  function EditItemModal() {
+	    _classCallCheck(this, EditItemModal);
+	
+	    var _this = _possibleConstructorReturn(this, (EditItemModal.__proto__ || Object.getPrototypeOf(EditItemModal)).call(this));
+	
+	    _this.state = {};
+	
+	    _this.onEditClick = _this.onEditClick.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(EditItemModal, [{
+	    key: 'onEditClick',
+	    value: function onEditClick() {
+	      var _props = this.props,
+	          name = _props.name,
+	          productOption = _props.productOption;
+	
+	      this.props.handleEditClick(name, productOption);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        _reactBootstrap.Modal,
+	        { bsSize: 'small', 'aria-labelledby': 'contained-modal-title-sm' },
+	        _react2.default.createElement(
+	          _reactBootstrap.Modal.Header,
+	          { closeButton: true },
+	          _react2.default.createElement(
+	            _reactBootstrap.Modal.Title,
+	            { id: 'contained-modal-title-sm' },
+	            'Modal heading'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _reactBootstrap.Modal.Body,
+	          null,
+	          _react2.default.createElement(
+	            'h4',
+	            null,
+	            'Wrapped Text'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _reactBootstrap.Modal.Footer,
+	          null,
+	          _react2.default.createElement(
+	            _reactBootstrap.Button,
+	            null,
+	            'Close'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return EditItemModal;
+	}(_react.Component);
+	
+	exports.default = EditItemModal;
 
 /***/ })
 /******/ ]);
